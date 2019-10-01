@@ -5,6 +5,7 @@ using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
+using CommandAggregatorExample.ViewModels;
 
 namespace WpfCommandAggregator.Core.ExampleApp
 {
@@ -13,5 +14,16 @@ namespace WpfCommandAggregator.Core.ExampleApp
     /// </summary>
     public partial class App : Application
     {
+        protected override void OnStartup(StartupEventArgs e)
+        {
+            base.OnStartup(e);
+
+            MainWindow window = new MainWindow
+            {
+                DataContext = new MainViewModel()
+            };
+
+            window.Show();
+        }
     }
 }

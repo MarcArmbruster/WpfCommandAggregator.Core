@@ -3,9 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29324.140
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WpfCommandAggregator.Core.ExampleApp", "WpfCommandAggregator.Core.ExampleApp\WpfCommandAggregator.Core.ExampleApp.csproj", "{6AF70D7D-9070-4AFE-A85E-809F826689AC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WpfCommandAggregator.Core.ExampleApp", "WpfCommandAggregator.Core.ExampleApp\WpfCommandAggregator.Core.ExampleApp.csproj", "{6AF70D7D-9070-4AFE-A85E-809F826689AC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WpfCommandAggregator.Core", "WpfCommandAggregator.Core\WpfCommandAggregator.Core.csproj", "{2310FF45-6CA4-49B3-87F8-35B51588DB51}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WpfCommandAggregator.Core", "WpfCommandAggregator.Core\WpfCommandAggregator.Core.csproj", "{2310FF45-6CA4-49B3-87F8-35B51588DB51}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTests", "UnitTests\UnitTests.csproj", "{C5C6F6DD-5412-4EA0-BCCB-CD23D579FEFC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{2310FF45-6CA4-49B3-87F8-35B51588DB51}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2310FF45-6CA4-49B3-87F8-35B51588DB51}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2310FF45-6CA4-49B3-87F8-35B51588DB51}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C5C6F6DD-5412-4EA0-BCCB-CD23D579FEFC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C5C6F6DD-5412-4EA0-BCCB-CD23D579FEFC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C5C6F6DD-5412-4EA0-BCCB-CD23D579FEFC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C5C6F6DD-5412-4EA0-BCCB-CD23D579FEFC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

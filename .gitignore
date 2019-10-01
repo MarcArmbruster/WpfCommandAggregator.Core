@@ -27,3 +27,6 @@
 /Code/WpfCommandAggregator.Core/WpfCommandAggregator.Core/obj
 /Code/WpfCommandAggregator.Core/.vs/WpfCommandAggregator.Core/DesignTimeBuild
 /Code/WpfCommandAggregator.Core/WpfCommandAggregator.Core.ExampleApp/bin/Debug/netcoreapp3.0
+/Code/WpfCommandAggregator.Core/.vs/WpfCommandAggregator.Core/v16/TestStore/0
+/Code/WpfCommandAggregator.Core/UnitTests/bin/Debug/netcoreapp3.0
+/Code/WpfCommandAggregator.Core/UnitTests/obj

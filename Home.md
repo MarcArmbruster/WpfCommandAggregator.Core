@@ -3,7 +3,7 @@ The WPF.Core Command Aggregator is a solution to reduce WPF command definitions 
 In addition, a BaseViewModel class (BaseVm) with an integrated command aggregator instance and the DependsOn attribute is supported.
 It is the .net Core version of the classic WpfCommandAggregator.
 
-Latest stable version is available as a nuGet package:<br/>
+Latest stable version is available as a nuGet package (up from November 2019):<br/>
 [nuGet](https://www.nuget.org/packages/WPFCommandAggregator.Core/)
 
 See also other versions on nuget:<br/>
@@ -17,7 +17,7 @@ See also other versions on nuget:<br/>
 
 ## The Background
 
-Many years I worked on classical many WPF projects (MVVM) with many views and thereof with many command objects. 
+Many years I worked on many WPF projects (MVVM) with many views and thereof with many command objects. 
 It was quite boring to write similar code for every command definition. 
 The well known RelayCommand (Josh Smith) helps a lot but there is still similar code for every command definition.
 - private ICommand member
@@ -72,45 +72,45 @@ A method called _AddOrSetCommand_ (overloaded) provides the registration of new 
 ```C#
 public void AddOrSetCommand(string key, ICommand command)
 {
-   if (this.commands.Any(k => k.Key == key))
+   if (string.IsNullOrEmpty(key) == false)
    {
-      this.commands[key] = command;
+	   if (this.commands.Any(k => k.Key == key))
+	   {
+		  this.commands[key] = command;
+	   }
+	   else
+	   {
+		  this.commands.AddOrUpdate(key, command, (exkey, excmd) => command);
+	   }
    }
-   else
-   {
-      this.commands.AddOrUpdate(key, command, (exkey, excmd) => command);
-    }
 }
 
 public void AddOrSetCommand(string key, Action<object> executeDelegate, Predicate<object> canExecuteDelegate)
 {
-   if (this.commands.Any(k => k.Key == key))
+   if (string.IsNullOrEmpty(key) == false)
    {
-      this.commands[key] = new RelayCommand(executeDelegate, canExecuteDelegate);
-   }
-   else
-   {
-      ICommand command = new RelayCommand(executeDelegate, canExecuteDelegate);
-      this.commands.AddOrUpdate(key, command, (exkey, excmd) => command);
+	   if (this.commands.Any(k => k.Key == key))
+	   {
+		  this.commands[key] = new RelayCommand(executeDelegate, canExecuteDelegate);
+	   }
+	   else
+	   {
+		  ICommand command = new RelayCommand(executeDelegate, canExecuteDelegate);
+		  this.commands.AddOrUpdate(key, command, (exkey, excmd) => command);
+	   }
    }
 }
 ```
 
 So, we have the functionaliy to collect commands within a CommandAggregator class, but how we can use it - especially in Bindings?
 First of all my BaseViewModel class is provided with one CommandAggregator instance and an abstract 
-method called _InitCommands_.
+method called _InitCommands_. The CommandAggregator instance is created by a factory class. This factrory class provides also 
+the possibility to register an own and individual implementation of the ICommandAggregator interface - if required.
 
 ```C#
 public abstract class BaseVm : INotifyPropertyChanged
 {
-   private CommandAggregator cmdAgg = new CommandAggregator();
-   public CommandAggregator CmdAgg
-   {
-       get
-       {
-           return this.cmdAgg;
-        }
-   }
+   public ICommandAggregator CmdAgg { get; } = CommandAggregatorFactory.GetNewCommandAggregator();
 
    protected abstract void InitCommands();
 
@@ -140,14 +140,7 @@ But there is still one problem left: How do we bind the commands?
 At this point an indexer can help us. Indexers can be used in Bindings for a OneWay binding. Commands do not use TwoWay bindings, so an indexer within the CommandAggregator class enables us to establish a command binding in XAML.
 
 ```C#
-   public ICommand this[string key]
-   {
-       get
-       {
-           // The indexer is using the GetCommand-Method
-           return this.GetCommand(key);
-       }
-    }
+    public ICommand this[string key] => this.GetCommand(key);
 
     public ICommand GetCommand(string key)
     {
@@ -160,7 +153,7 @@ At this point an indexer can help us. Indexers can be used in Bindings for a One
           // Empty command (to avoid null reference exceptions)
           return new RelayCommand(p1 => { });
         }  
-      }
+    }
 ```
 
 ## Usage
@@ -173,9 +166,7 @@ In XAML we can use the CommandAggregator instance of the view model like this:
 
 Indexer binding works with square brackets and the name of the registered command - you do not need any quotation marks!
 
-The WPF Command Aggregator is working well in my current and previous projects. I was able to reduce the lines of code for command definitions for more than 2000 (within my current project) without loosing any functionality! Each command definition/registration is reduced to exact one line of code.
-
-Thanks to Gerhard Ahrens for all the discussions and testing after work time!
+The WPF Command Aggregator is working well in my current and also in many previous projects. I was able to reduce the lines of code for command definitions for more than 2000 (within my current project) without loosing any functionality! Each command definition/registration is reduced to exact one line of code.
 
 ## Hierarchy command
 

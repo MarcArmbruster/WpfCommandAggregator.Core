@@ -91,14 +91,7 @@
         /// </value>
         /// <param name="key">The command key.</param>
         /// <returns>The command for the given key (Empty command if not found/exists).</returns>
-        public ICommand this[string key]
-        {
-            get
-            {
-                // The indexer is using the GetCommand-Method
-                return this.GetCommand(key);
-            }
-        }
+        public ICommand this[string key] => this.GetCommand(key);
 
         /// <summary>
         /// Gets a value indicating whether this instance has any command.
@@ -106,13 +99,7 @@
         /// <value>
         /// <c>true</c> if this instance has any command; otherwise, <c>false</c>.
         /// </value>
-        public bool HasAnyCommand
-        {
-            get
-            {
-                return this.commands.Any();
-            }
-        }
+        public bool HasAnyCommand => this.commands.Any();
 
         #endregion Properties
 

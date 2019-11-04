@@ -1,24 +1,22 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Windows.Input;
-
-namespace WpfCommandAggregator.Core
+﻿namespace WpfCommandAggregator.Core
 {
+    using System;
+    using System.Windows.Input;
+
     /// <summary>
-    /// Relay Command based on Josh Smith's implementation.
-    /// Extended by additional null checks and renamings (M. Armbruster).
+    /// Relay Command (based on Josh Smith's original idea).
+    /// Extended by additional null checks, renamings, pre- and post action delegates (M. Armbruster).
     /// </summary>   
     /// <remarks>
     ///   <para><b>History</b></para>
     ///   <list type="table">
     ///   <item>
     ///   <term><b>Author:</b></term>
-    ///   <description>See Josh Smith's implementation!</description>
+    ///   <description>Marc Armbruster</description>
     ///   </item>
     ///   <item>
     ///   <term><b>Date:</b></term>
-    ///   <description>Oct/01/2019</description>
+    ///   <description>Nov/04/2019</description>
     ///   </item>
     ///   <item>
     ///   <term><b>Remarks:</b></term>
@@ -49,11 +47,6 @@ namespace WpfCommandAggregator.Core
         public Action postActionDelegate;
 
         /// <summary>
-        /// Occurs when changes occur that affect whether or not the command should execute.
-        /// </summary>
-        public event EventHandler CanExecuteChanged;
-
-        /// <summary>
         /// Creates a new command that can always execute.
         /// </summary>
         /// <param name="execute">The execution logic.</param>
@@ -70,7 +63,7 @@ namespace WpfCommandAggregator.Core
         {
             if (execute == null)
             {
-                throw new ArgumentNullException("Execute delegate is required for a command!");
+                this.executeDelegate = new Action<object>(p1 => { });
             }
 
             this.executeDelegate = execute;
@@ -88,18 +81,13 @@ namespace WpfCommandAggregator.Core
         {
             if (execute == null)
             {
-                throw new ArgumentNullException("Execute delegate is required for a command!");
+                this.executeDelegate = new Action<object>(p1 => { });
             }
 
             this.executeDelegate = execute;
             this.canExecuteDelegate = canExecute;
             this.preActionDelegate = preAction;
             this.postActionDelegate = postAction;
-        }
-
-        private void RaiseCanExecuteChanged()
-        {
-            this.CanExecuteChanged?.Invoke(this, EventArgs.Empty);
         }
 
         /// <summary>
@@ -115,27 +103,23 @@ namespace WpfCommandAggregator.Core
         }
 
         /// <summary>
+        /// Registration of the CanExecute. Listening for changes using the CommandManager.
+        /// </summary>
+        public event EventHandler CanExecuteChanged
+        {
+            add { CommandManager.RequerySuggested += value; }
+            remove { CommandManager.RequerySuggested -= value; }
+        }
+
+        /// <summary>
         /// The Execute method. Calls the given Execute delegate.
         /// </summary>
         /// <param name="parameter">The Execute parameter value.</param>
         public virtual void Execute(object parameter)
         {
-            if (preActionDelegate != null)
-            {
-                preActionDelegate.Invoke();
-            }
-
-            if (this.executeDelegate != null)
-            {
-                this.executeDelegate(parameter);
-            }
-
-            if (postActionDelegate != null)
-            {
-                postActionDelegate.Invoke();
-            }
-
-            this.RaiseCanExecuteChanged();
+            preActionDelegate?.Invoke();
+            executeDelegate?.Invoke(parameter);
+            postActionDelegate?.Invoke();
         }
 
         /// <summary>
@@ -145,7 +129,6 @@ namespace WpfCommandAggregator.Core
         public void OverridePreActionDelegate(Action preAction)
         {
             this.preActionDelegate = preAction;
-            this.RaiseCanExecuteChanged();
         }
 
         /// <summary>
@@ -155,7 +138,6 @@ namespace WpfCommandAggregator.Core
         public void OverridePostActionDelegate(Action postAction)
         {
             this.postActionDelegate = postAction;
-            this.RaiseCanExecuteChanged();
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿namespace WpfCommandAggregator.Core
 {
     using System;
+    using System.Collections.Generic;
     using System.Threading.Tasks;
     using System.Windows.Input;
 
@@ -34,15 +35,22 @@
         /// </value>
         /// <param name="key">The key.</param>
         /// <returns>The command.</returns>
-        ICommand this[string key] { get; }
+        ICommandContainer this[string key] { get; }
 
         /// <summary>
-        /// Gets a value indicating whether this instance has any command.
+        /// Gets a value indicating whether this instance has any command container.
         /// </summary>
         /// <value>
-        /// <c>true</c> if this instance has any command; otherwise, <c>false</c>.
+        /// <c>true</c> if this instance has any command container; otherwise, <c>false</c>.
         /// </value>
-        bool HasAnyCommand { get; }
+        bool HasAnyCommandContainer { get; }
+
+        /// <summary>
+        /// Adds the or set command definition.
+        /// </summary>
+        /// <param name="key">The key.</param>
+        /// <param name="command">The command.</param>
+        void AddOrSetCommand(string key, ICommandContainer command);
 
         /// <summary>
         /// Adds the or set command.
@@ -50,6 +58,13 @@
         /// <param name="key">The key.</param>
         /// <param name="command">The command.</param>
         void AddOrSetCommand(string key, ICommand command);
+
+        /// <summary>
+        /// Adds the or set command.
+        /// </summary>
+        /// <param name="key">The key.</param>
+        /// <param name="command">The command.</param>
+        void AddOrSetCommand(string key, ICommand command, Dictionary<string, object> settings);
 
         /// <summary>
         /// Adds the or set command.
@@ -74,7 +89,7 @@
         Task ExecuteAsync(string key, object parameter = null);
 
         /// <summary>
-        /// Checks if a command exists.
+        /// Checks if a command definition exists.
         /// </summary>
         /// <param name="key">The key.</param>
         bool Exists(string key);
@@ -84,7 +99,13 @@
         /// </summary>
         /// <param name="key">The command key.</param>
         /// <returns>The command.</returns>
-        ICommand GetCommand(string key);
+        ICommandContainer GetCommandContainer(string key);
+
+        /// <summary>
+        /// Determines whether key points to a null command container.
+        /// </summary>
+        /// <param name="key">The key.</param>
+        bool HasNullCommandContainer(string key);
 
         /// <summary>
         /// Determines whether key points to a null command.

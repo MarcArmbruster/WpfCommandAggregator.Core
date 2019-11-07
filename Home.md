@@ -2,6 +2,8 @@
 The WPF.Core Command Aggregator is a solution to reduce WPF command definitions to an absolute minimum of code lines (only one per command).
 In addition, a BaseViewModel class (BaseVm) with an integrated command aggregator instance and the DependsOn attribute is supported.
 It is the .net Core version of the classic WpfCommandAggregator.
+A significant change is the CommandContainer. Up from this .net Core version the commands are wrapped in a container object 
+to enable the definition of additional setting values. See details below. 
 
 Latest stable version is available as a nuGet package (up from November 2019):<br/>
 [nuGet](https://www.nuget.org/packages/WPFCommandAggregator.Core/)
@@ -52,6 +54,10 @@ The WPF Command Aggregator is a solution to reduce the command definitions to a 
 ```C#
 this.CmdAgg.AddOrSetCommand("Print", new RelayCommand(p1 => Print(p1), p2 => CanPrint));
 ```
+OR (including settings)
+```C#
+this.CmdAgg.AddOrSetCommand("Print", new RelayCommand(p1 => Print(p1), p2 => CanPrint), new Dictionary<string, object> { { "ButtonContent", "Print me!" }});
+```
 
 This is an reduction of about 10 lines (!!!) and (in my opinion) a very easy to read command definition.
 How can this be achieved and how we can use it for bindings (XAML)?
@@ -100,6 +106,22 @@ public void AddOrSetCommand(string key, Action<object> executeDelegate, Predicat
 	   }
    }
 }
+
+public void AddOrSetCommand(string key, ICommand command, Dictionary<string, object> settings)
+{
+    if (string.IsNullOrEmpty(key) == false)
+    {
+        if (this.commandContainers.Any(k => k.Key == key))
+        {
+            this.commandContainers[key] = new CommandContainer(command, settings);
+        }
+        else
+        {
+            var commandDefinition = new CommandContainer(command, settings);
+            this.commandContainers.AddOrUpdate(key, commandDefinition, (exkey, excmd) => commandDefinition);
+        }
+    }
+}
 ```
 
 So, we have the functionaliy to collect commands within a CommandAggregator class, but how we can use it - especially in Bindings?
@@ -137,22 +159,23 @@ public class MainVm : BaseVm
 ```
 
 But there is still one problem left: How do we bind the commands?
-At this point an indexer can help us. Indexers can be used in Bindings for a OneWay binding. Commands do not use TwoWay bindings, so an indexer within the CommandAggregator class enables us to establish a command binding in XAML.
+At this point an indexer can help us. Indexers can be used in Bindings. 
+Commands do not use TwoWay bindings, so an indexer within the CommandAggregator class enables us to establish a command binding in XAML.
 
 ```C#
-    public ICommand this[string key] => this.GetCommand(key);
+    public ICommand this[string key] => this.GetCommandContainer(key);
 
-    public ICommand GetCommand(string key)
+    public ICommandContainer GetCommandContainer(string key)
     {
-       if (this.commands.Any(k => k.Key == key))
-       {
-          return this.commands[key];
-       }
-       else
-       {
-          // Empty command (to avoid null reference exceptions)
-          return new RelayCommand(p1 => { });
-        }  
+        if (this.commandContainers.Any(k => k.Key == key))
+        {
+            return this.commandContainers[key];
+        }
+        else
+        {
+            // Empty command (to avoid null reference exceptions)
+            return new CommandContainer(new RelayCommand(p1 => { }));
+        }
     }
 ```
 
@@ -161,12 +184,28 @@ At this point an indexer can help us. Indexers can be used in Bindings for a One
 In XAML we can use the CommandAggregator instance of the view model like this:
 
 ```C#
-<Button Content="Print" Command="{Binding CmdAgg[Print]}" />
+<Button Content="Print" Command="{Binding CmdAgg[Print].Command}" />
 ```
 
 Indexer binding works with square brackets and the name of the registered command - you do not need any quotation marks!
 
-The WPF Command Aggregator is working well in my current and also in many previous projects. I was able to reduce the lines of code for command definitions for more than 2000 (within my current project) without loosing any functionality! Each command definition/registration is reduced to exact one line of code.
+The commands are wrapped into an ICommandContainer. This container provides the possibility to add meta data, e.g. The caption to display on a WPF-Button.
+```C#
+this.CmdAgg.AddOrSetCommand(
+            "Exit", 
+            new RelayCommand(p1 => MessageBox.Show("Exit called")),
+            new Dictionary<string, object>{ { "Title", "Exit" } });
+```
+```XAML
+<Button
+    Command="{Binding CmdAgg[Exit].Command}"
+    Content="{Binding CmdAgg[Exit][Title]}"
+    Template="{StaticResource buttonTemplate}" />
+<Button
+```
+
+The WPF Command Aggregator is working well in many projects. 
+I was able to reduce the lines of code for command definitions for more than 2000 (within my current project) without loosing any functionality! Each command definition/registration is reduced to exact one line of code.
 
 ## Hierarchy command
 
@@ -293,7 +332,6 @@ Now, the attribute defines the dependencies and the BaseVM class will do the res
 
 ## 'SetPropertyValue'
 
-In version 1.3.0.0 the SetPropertyValue method was introduced. 
 In some cases in could be helpful to additionally execute some 
 code lines before or - normally - after the set and notification is done.
 In version 1.4.0.0 the possibility to additionally define two action delegates is implemented.

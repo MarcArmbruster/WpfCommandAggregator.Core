@@ -126,7 +126,10 @@
         protected sealed override void InitCommands()
         {
             // AddOrSetCommand method is overridden --> provide ICommad or Action / Predicate delegates            
-            this.CmdAgg.AddOrSetCommand("Exit", new RelayCommand(p1 => MessageBox.Show("Exit called")));
+            this.CmdAgg.AddOrSetCommand(
+                "Exit", 
+                new RelayCommand(p1 => MessageBox.Show("Exit called")),
+                new Dictionary<string, object>{ { "Title", "Exit" } });
             this.CmdAgg.AddOrSetCommand("Print", new RelayCommand(p1 => MessageBox.Show("Print called"), p2 => true, this.performanceChecker.Start, this.performanceChecker.Stop));
             this.CmdAgg.AddOrSetCommand("Options", new RelayCommand(p1 => MessageBox.Show("Options called"), p2 => true));
             this.CmdAgg.AddOrSetCommand("About", new RelayCommand(p1 => MessageBox.Show("About" + (p1 == null ? string.Empty : " [" + p1 + "]") + " called"), p2 => true));

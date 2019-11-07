@@ -59,7 +59,8 @@
             this.ReadPropertyDependencies();
         }
 
-        #endregion Constructor        
+        #endregion Constructor     
+        
         #region WPF Command Aggregator
 
         /// <summary>
@@ -216,7 +217,7 @@
             var eventArgs = new PropertyChangedEventArgs(propertyName);
             PropertyChanged(this, eventArgs);
 
-            if (this.AutoTriggerCommandNotification && this.CmdAgg.HasAnyCommand)
+            if (this.AutoTriggerCommandNotification && this.CmdAgg.HasAnyCommandContainer)
             {
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(this.CmdAgg)));
             }

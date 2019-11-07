@@ -2,7 +2,6 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.Windows.Input;
 
     /// <summary>
     /// Factory class for new command aggregator instances.
@@ -26,6 +25,9 @@
     /// </remarks>
     public class CommandAggregatorFactory
     {
+        /// <summary>
+        /// Type of the optional external command aggregator type.
+        /// </summary>
         private static Type externalAggregatorType = null;
 
         /// <summary>
@@ -69,9 +71,9 @@
         /// <summary>
         /// Gets the new command aggregator.
         /// </summary>
-        /// <param name="commands">The commands.</param>
-        /// <returns></returns>
-        public static ICommandAggregator GetNewCommandAggregator(IEnumerable<KeyValuePair<string, ICommand>> commands)
+        /// <param name="commandContainers">The command containers.</param>
+        /// <returns>The command aggregator.</returns>
+        public static ICommandAggregator GetNewCommandAggregator(IEnumerable<KeyValuePair<string, ICommandContainer>> commandContainers)
         {
             if (externalAggregatorType != null)
             {
@@ -81,7 +83,7 @@
                     throw new InvalidCastException("Registered aggregator type could not handled as a valid command aggregator");
                 }
 
-                foreach (var cmd in commands)
+                foreach (var cmd in commandContainers)
                 {
                     aggregator.AddOrSetCommand(cmd.Key, cmd.Value);
                 }
@@ -89,7 +91,7 @@
                 return aggregator;
             }
 
-            return new CommandAggregator(commands);
+            return new CommandAggregator(commandContainers);
         }
     }
 }

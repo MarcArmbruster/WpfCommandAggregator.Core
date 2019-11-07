@@ -2,6 +2,7 @@
 {
     using Microsoft.VisualStudio.TestTools.UnitTesting;
     using System;
+    using System.Collections.Generic;
     using System.Threading.Tasks;
     using System.Windows.Input;
     using WpfCommandAggregator.Core;
@@ -36,11 +37,21 @@
     /// </summary>
     internal class OwnAggregator : ICommandAggregator
     {
-        public ICommand this[string key] => throw new NotImplementedException();
+        public ICommandContainer this[string key] => throw new NotImplementedException();
 
-        public bool HasAnyCommand => throw new NotImplementedException();
+        public bool HasAnyCommandContainer => throw new NotImplementedException();
 
         public void AddOrSetCommand(string key, ICommand command)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void AddOrSetCommand(string key, ICommand command, Dictionary<string, object> settings)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void AddOrSetCommand(string key, ICommandContainer commandContainer)
         {
             throw new NotImplementedException();
         }
@@ -70,7 +81,12 @@
             throw new NotImplementedException();
         }
 
-        public ICommand GetCommand(string key)
+        public ICommandContainer GetCommandContainer(string key)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool HasNullCommandContainer(string key)
         {
             throw new NotImplementedException();
         }

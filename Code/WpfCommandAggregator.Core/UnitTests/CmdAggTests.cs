@@ -35,9 +35,9 @@
             ICommand cmd1 = new RelayCommand(p1 => { }, p2 => true);
             ICommand cmd2 = new RelayCommand(p1 => { }, p2 => true);
 
-            var commandList = new List<KeyValuePair<string, ICommand>>();
-            commandList.Add(new KeyValuePair<string, ICommand>("A", cmd1));
-            commandList.Add(new KeyValuePair<string, ICommand>("B", cmd2));
+            var commandList = new List<KeyValuePair<string, ICommandContainer>>();
+            commandList.Add(new KeyValuePair<string, ICommandContainer>("A", new CommandContainer(cmd1)));
+            commandList.Add(new KeyValuePair<string, ICommandContainer>("B", new CommandContainer(cmd2)));
             ICommandAggregator cmdAgg = CommandAggregatorFactory.GetNewCommandAggregator(commandList);
 
             Assert.IsTrue(cmdAgg.Exists("A"));
@@ -46,11 +46,23 @@
         }
 
         [TestMethod]
+        public void HasNullCommandContainerTest()
+        {
+            ICommandAggregator cmdAgg = CommandAggregatorFactory.GetNewCommandAggregator();
+
+            cmdAgg.AddOrSetCommand("TestCommand1", (ICommandContainer)null);
+            cmdAgg.AddOrSetCommand("TestCommand2", new RelayCommand(p1 => { }, p2 => true));
+
+            Assert.IsTrue(cmdAgg.HasNullCommandContainer("TestCommand1"));
+            Assert.IsFalse(cmdAgg.HasNullCommandContainer("TestCommand2"));
+        }
+
+        [TestMethod]
         public void HasNullCommandTest()
         {
             ICommandAggregator cmdAgg = CommandAggregatorFactory.GetNewCommandAggregator();
 
-            cmdAgg.AddOrSetCommand("TestCommand1", (ICommand)null);
+            cmdAgg.AddOrSetCommand("TestCommand1", (ICommandContainer)null);
             cmdAgg.AddOrSetCommand("TestCommand2", new RelayCommand(p1 => { }, p2 => true));
 
             Assert.IsTrue(cmdAgg.HasNullCommand("TestCommand1"));
@@ -99,7 +111,7 @@
         }
 
         [TestMethod]
-        public void GetCommandAndIndexerAndExecuteTest()
+        public void GetCommandContainerAndIndexerAndExecuteTest()
         {
             ICommandAggregator cmdAgg = CommandAggregatorFactory.GetNewCommandAggregator();
             StringBuilder strBld = new StringBuilder(1000);
@@ -110,17 +122,17 @@
             cmdAgg.AddOrSetCommand("TestCommand4", new RelayCommand(p1 => { strBld.Append("4"); }, p2 => true));
             cmdAgg.AddOrSetCommand("TestCommand5", new RelayCommand(p1 => { strBld.Append("5"); }, p2 => true));
 
-            ICommand cmd5 = cmdAgg.GetCommand("TestCommand5");
+            ICommand cmd5 = cmdAgg.GetCommandContainer("TestCommand5").Command;
             cmd5.Execute(null);
             Assert.AreEqual("5", strBld.ToString());
 
             strBld.Clear();
-            ICommand cmd2 = cmdAgg.GetCommand("TestCommand2");
+            ICommand cmd2 = cmdAgg.GetCommandContainer("TestCommand2").Command;
             cmd2.Execute(null);
             Assert.AreEqual("2", strBld.ToString());
 
             strBld.Clear();
-            ICommand cmd1 = cmdAgg["TestCommand1"];
+            ICommand cmd1 = cmdAgg["TestCommand1"].Command;
             cmd1.Execute(null);
             Assert.AreEqual("1", strBld.ToString());
         }
@@ -164,19 +176,19 @@
             cmdAgg.AddOrSetCommand("TestCommand4", new RelayCommand(p1 => { strBld.Append("4"); }, p2 => false));
             cmdAgg.AddOrSetCommand("TestCommand5", new RelayCommand(p1 => { strBld.Append("5"); }, p2 => true));
 
-            ICommand cmd1 = cmdAgg["TestCommand1"];
+            ICommand cmd1 = cmdAgg["TestCommand1"].Command;
             Assert.IsTrue(cmd1.CanExecute(null));
 
-            ICommand cmd2 = cmdAgg["TestCommand2"];
+            ICommand cmd2 = cmdAgg["TestCommand2"].Command;
             Assert.IsFalse(cmd2.CanExecute(null));
 
-            ICommand cmd3 = cmdAgg["TestCommand3"];
+            ICommand cmd3 = cmdAgg["TestCommand3"].Command;
             Assert.IsTrue(cmd3.CanExecute(null));
 
-            ICommand cmd4 = cmdAgg["TestCommand4"];
+            ICommand cmd4 = cmdAgg["TestCommand4"].Command;
             Assert.IsFalse(cmd4.CanExecute(null));
 
-            ICommand cmd5 = cmdAgg["TestCommand5"];
+            ICommand cmd5 = cmdAgg["TestCommand5"].Command;
             Assert.IsTrue(cmd5.CanExecute(null));
         }
 
@@ -192,8 +204,8 @@
             cmdAgg.AddOrSetCommand("TestCommand1", new RelayCommand(p1 => { strBld.Append("3"); }, p2 => true));
             cmdAgg.AddOrSetCommand("TestCommand2", p1 => { strBld.Append("4"); }, p2 => true);
 
-            cmdAgg["TestCommand1"].Execute(null);
-            cmdAgg["TestCommand2"].Execute(null);
+            cmdAgg["TestCommand1"].Command.Execute(null);
+            cmdAgg["TestCommand2"].Command.Execute(null);
 
             Assert.AreEqual("34", strBld.ToString());
         }

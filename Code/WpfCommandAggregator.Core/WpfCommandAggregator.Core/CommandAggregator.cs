@@ -37,9 +37,9 @@
         #region Private Members
 
         /// <summary>
-        /// The private (thread save) collection of commands.
+        /// The private (thread save) collection of command containers.
         /// </summary>
-        private readonly ConcurrentDictionary<string, ICommand> commands;
+        private readonly ConcurrentDictionary<string, ICommandContainer> commandContainers;
 
         #endregion Private Members
 
@@ -50,18 +50,18 @@
         /// </summary>
         public CommandAggregator()
         {
-            this.commands = new ConcurrentDictionary<string, ICommand>();
+            this.commandContainers = new ConcurrentDictionary<string, ICommandContainer>();
         }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CommandAggregator"/> class.
         /// </summary>
-        /// <param name="commands">The commands.</param>
-        public CommandAggregator(IEnumerable<KeyValuePair<string, ICommand>> commands) : this()
+        /// <param name="commandContainers">The command containerss.</param>
+        public CommandAggregator(IEnumerable<KeyValuePair<string, ICommandContainer>> commandContainers) : this()
         {
-            if (commands != null)
+            if (this.commandContainers != null)
             {
-                foreach (KeyValuePair<string, ICommand> item in commands.Where(i => i.Key != null && i.Value != null))
+                foreach (KeyValuePair<string, ICommandContainer> item in commandContainers.Where(i => i.Key != null && i.Value != null))
                 {
                     this.AddOrSetCommand(item.Key, item.Value);
                 }
@@ -73,7 +73,7 @@
         /// </summary>
         ~CommandAggregator()
         {
-            this.commands.Clear();
+            this.commandContainers.Clear();
         }
 
         #endregion Constructors
@@ -91,15 +91,15 @@
         /// </value>
         /// <param name="key">The command key.</param>
         /// <returns>The command for the given key (Empty command if not found/exists).</returns>
-        public ICommand this[string key] => this.GetCommand(key);
+        public ICommandContainer this[string key] => this.GetCommandContainer(key);
 
         /// <summary>
-        /// Gets a value indicating whether this instance has any command.
+        /// Gets a value indicating whether this instance has any command container.
         /// </summary>
         /// <value>
         /// <c>true</c> if this instance has any command; otherwise, <c>false</c>.
         /// </value>
-        public bool HasAnyCommand => this.commands.Any();
+        public bool HasAnyCommandContainer => this.commandContainers.Any();
 
         #endregion Properties
 
@@ -110,17 +110,59 @@
         /// </summary>
         /// <param name="key">The command key.</param>
         /// <param name="command">The command.</param>
+        public void AddOrSetCommand(string key, ICommandContainer command)
+        {
+            if (string.IsNullOrEmpty(key) == false)
+            {
+                if (this.commandContainers.Any(k => k.Key == key))
+                {
+                    this.commandContainers[key] = command;
+                }
+                else
+                {
+                    this.commandContainers.AddOrUpdate(key, command, (exkey, excmd) => command);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Adds or set the command.
+        /// </summary>
+        /// <param name="key">The command key.</param>
+        /// <param name="command">The command.</param>
         public void AddOrSetCommand(string key, ICommand command)
         {
             if (string.IsNullOrEmpty(key) == false)
             {
-                if (this.commands.Any(k => k.Key == key))
+                if (this.commandContainers.Any(k => k.Key == key))
                 {
-                    this.commands[key] = command;
+                    this.commandContainers[key] = new CommandContainer(command);
                 }
                 else
                 {
-                    this.commands.AddOrUpdate(key, command, (exkey, excmd) => command);
+                    var commandDefinition = new CommandContainer(command);
+                    this.commandContainers.AddOrUpdate(key, commandDefinition, (exkey, excmd) => commandDefinition);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Adds or set the command.
+        /// </summary>
+        /// <param name="key">The command key.</param>
+        /// <param name="command">The command.</param>
+        public void AddOrSetCommand(string key, ICommand command, Dictionary<string, object> settings)
+        {
+            if (string.IsNullOrEmpty(key) == false)
+            {
+                if (this.commandContainers.Any(k => k.Key == key))
+                {
+                    this.commandContainers[key] = new CommandContainer(command, settings);
+                }
+                else
+                {
+                    var commandDefinition = new CommandContainer(command, settings);
+                    this.commandContainers.AddOrUpdate(key, commandDefinition, (exkey, excmd) => commandDefinition);
                 }
             }
         }
@@ -135,14 +177,19 @@
         {
             if (string.IsNullOrEmpty(key) == false)
             {
-                if (this.commands.Any(k => k.Key == key))
+                if (this.commandContainers.Any(k => k.Key == key))
                 {
-                    this.commands[key] = new RelayCommand(executeDelegate, canExecuteDelegate);
+                    ICommandContainer commandDefinition 
+                        = new CommandContainer(new RelayCommand(executeDelegate, canExecuteDelegate));
+                    
+                    this.commandContainers[key] = commandDefinition;
                 }
                 else
                 {
-                    ICommand command = new RelayCommand(executeDelegate, canExecuteDelegate);
-                    this.commands.AddOrUpdate(key, command, (exkey, excmd) => command);
+                    ICommandContainer commandDefinition 
+                        = new CommandContainer(new RelayCommand(executeDelegate, canExecuteDelegate));
+                    
+                    this.commandContainers.AddOrUpdate(key, commandDefinition, (exkey, excmd) => commandDefinition);
                 }
             }
         }
@@ -153,7 +200,7 @@
         /// <returns>Number of registered commands.</returns>
         public int Count()
         {
-            return this.commands.Count;
+            return this.commandContainers.Count;
         }
 
         /// <summary>
@@ -173,7 +220,7 @@
                 return Task.Factory.StartNew(() => { });
             }
 
-            return Task.Factory.StartNew(() => this.GetCommand(key).Execute(parameter));
+            return Task.Factory.StartNew(() => this.GetCommandContainer(key).Command.Execute(parameter));
         }
 
         /// <summary>
@@ -183,28 +230,45 @@
         /// <returns></returns>
         public bool Exists(string key)
         {
-            return this.commands.Any(k => k.Key == key);
+            return this.commandContainers.Any(k => k.Key == key);
         }
 
         /// <summary>
-        /// Gets the command. If command not exists, a dummy Action delegate will be returned (doing nothing).
+        /// Gets the command container. If command container not exists, a ontainer with a dummy Action delegate will be returned (doing nothing).
         /// </summary>
         /// <param name="key">The command key.</param>
         /// <returns>The command for the given key (Empty command if not found/exists).</returns>
-        public ICommand GetCommand(string key)
+        public ICommandContainer GetCommandContainer(string key)
         {
-            if (this.commands.Any(k => k.Key == key))
+            if (this.commandContainers.Any(k => k.Key == key))
             {
-                return this.commands[key];
+                return this.commandContainers[key];
             }
             else
             {
                 // Empty command (to avoid null reference exceptions)
-                return new RelayCommand(p1 => { });
+                return new CommandContainer(new RelayCommand(p1 => { }));
             }
         }
+
         /// <summary>
-        /// Determines whether the ICommand corresponding the specified key is null.
+        /// Determines whether the ICommandContainer corresponding the specified key is null.
+        /// </summary>
+        /// <param name="key">The command key.</param>
+        /// <returns>True if ICommand is null, false otherwise.</returns>
+        /// <exception cref="CommandNotDefinedException">Command with this key is not registered, yet.</exception>
+        public bool HasNullCommandContainer(string key)
+        {
+            if (this.Exists(key) == false)
+            {
+                return false;
+            }
+
+            return this.commandContainers.FirstOrDefault(k => k.Key == key).Value == null;
+        }
+
+        /// <summary>
+        /// Determines whether the ICommandContainer corresponding the specified key is null.
         /// </summary>
         /// <param name="key">The command key.</param>
         /// <returns>True if ICommand is null, false otherwise.</returns>
@@ -216,7 +280,8 @@
                 return false;
             }
 
-            return this.commands.FirstOrDefault(k => k.Key == key).Value == null;
+            var container = this.commandContainers.First(k => k.Key == key);
+            return container.Value?.Command == null;
         }
 
         /// <summary>
@@ -225,10 +290,10 @@
         /// <param name="key">The command key.</param>
         public void Remove(string key)
         {
-            if (this.commands.Any(k => k.Key == key))
+            if (this.commandContainers.Any(k => k.Key == key))
             {
-                ICommand oldCommand;
-                this.commands.TryRemove(key, out oldCommand);
+                ICommandContainer oldCommandDefinition;
+                this.commandContainers.TryRemove(key, out oldCommandDefinition);
             }
         }
 
@@ -237,9 +302,9 @@
         /// </summary>
         public void RemoveAll()
         {
-            if (this.commands != null)
+            if (this.commandContainers != null)
             {
-                this.commands.Clear();
+                this.commandContainers.Clear();
             }
         }
         #endregion Methods

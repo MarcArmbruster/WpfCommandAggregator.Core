@@ -7,7 +7,7 @@
     <Window.InputBindings>
         <KeyBinding
             Key="P"
-            Command="{Binding CmdAgg[Print]}"
+            Command="{Binding CmdAgg[Print].Command}"
             Modifiers="Ctrl" />
     </Window.InputBindings>
 
@@ -15,11 +15,11 @@
         <Menu DockPanel.Dock="Top">
 
             <MenuItem
-                Command="{Binding CmdAgg[SaveAll]}"
+                Command="{Binding CmdAgg[SaveAll].Command}"
                 CommandParameter="XYZ"
                 Header="Save All" />
-            <MenuItem Command="{Binding CmdAgg[SaveCmd1]}" Header="Save Item 1" />
-            <MenuItem Command="{Binding CmdAgg[SaveCmd2]}" Header="Save Item 2" />
+            <MenuItem Command="{Binding CmdAgg[SaveCmd1].Command}" Header="Save Item 1" />
+            <MenuItem Command="{Binding CmdAgg[SaveCmd2].Command}" Header="Save Item 2" />
 
         </Menu>
 
@@ -29,27 +29,27 @@
             DockPanel.Dock="Top">
             <WrapPanel Background="Transparent">
                 <Button
-                    Command="{Binding CmdAgg[Exit]}"
-                    Content="Exit"
+                    Command="{Binding CmdAgg[Exit].Command}"
+                    Content="{Binding CmdAgg[Exit][Title]}"
                     Template="{StaticResource buttonTemplate}" />
                 <Button
-                    Command="{Binding CmdAgg[SaveAll]}"
+                    Command="{Binding CmdAgg[SaveAll].Command}"
                     Content="Save all"
                     Template="{StaticResource buttonTemplate}" />
                 <Button
-                    Command="{Binding CmdAgg[Print]}"
+                    Command="{Binding CmdAgg[Print].Command}"
                     Content="Print"
                     Template="{StaticResource buttonTemplate}" />
                 <Button
-                    Command="{Binding CmdAgg[Options]}"
+                    Command="{Binding CmdAgg[Options].Command}"
                     Content="Options"
                     Template="{StaticResource buttonTemplate}" />
                 <Button
-                    Command="{Binding CmdAgg[About]}"
+                    Command="{Binding CmdAgg[About].Command}"
                     Content="About"
                     Template="{StaticResource buttonTemplate}" />
                 <Button
-                    Command="{Binding CmdAgg[AboutAsnyc]}"
+                    Command="{Binding CmdAgg[AboutAsnyc].Command}"
                     CommandParameter="async"
                     Content="AboutAsnyc"
                     Template="{StaticResource buttonTemplate}" />

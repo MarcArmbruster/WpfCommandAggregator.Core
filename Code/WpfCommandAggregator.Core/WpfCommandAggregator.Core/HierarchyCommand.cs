@@ -49,11 +49,7 @@
         /// </value>
         public IEnumerable<ICommand> ChildCommands
         {
-            get
-            {
-                return this.childCommands;
-            }
-
+            get => this.childCommands;
             set
             {
                 if (value != null)
@@ -248,7 +244,7 @@
         /// <param name="parameter">The Execute parameter value.</param>
         public override void Execute(object parameter)
         {
-            if (this.ChildCommands == null || this.ChildCommands.Any() == false)
+            if (this.ChildCommands == null || !this.ChildCommands.Any())
             {
                 if (this.ExecuteStrategy != HierarchyExecuteStrategy.AllChildsOnly)
                 {
@@ -285,7 +281,7 @@
         /// </returns>
         public override bool CanExecute(object parameter)
         {
-            if (this.ChildCommands == null || this.ChildCommands.Any() == false)
+            if (this.ChildCommands == null || !this.ChildCommands.Any())
             {
                 return base.CanExecute(parameter);
             }

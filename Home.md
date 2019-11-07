@@ -199,8 +199,7 @@ this.CmdAgg.AddOrSetCommand(
 ```XAML
 <Button
     Command="{Binding CmdAgg[Exit].Command}"
-    Content="{Binding CmdAgg[Exit][Title]}"
-    Template="{StaticResource buttonTemplate}" />
+    Content="{Binding CmdAgg[Exit][Title]}" />
 <Button
 ```
 

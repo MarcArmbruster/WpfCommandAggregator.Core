@@ -183,7 +183,7 @@ Commands do not use TwoWay bindings, so an indexer within the CommandAggregator 
 
 In XAML we can use the CommandAggregator instance of the view model like this:
 
-```C#
+```XAML
 <Button Content="Print" Command="{Binding CmdAgg[Print].Command}" />
 ```
 
@@ -334,7 +334,7 @@ Now, the attribute defines the dependencies and the BaseVM class will do the res
 
 In some cases in could be helpful to additionally execute some 
 code lines before or - normally - after the set and notification is done.
-In version 1.4.0.0 the possibility to additionally define two action delegates is implemented.
+Therefore the possibility to additionally define two action delegates is implemented.
 The following example shows it based on two simple methods of a performance checker instance.
 
 ```C#
@@ -372,8 +372,8 @@ can now be simplified with the following one:
 
 ## Automatic values storage, custom aggregators and notification optimization
 
-1. The optimization: Previously, a **notification** was always triggered for value assignments to a (bindable) property. As of version 1.5.0.0, this only happens if the value has effectively changed - in other words, if the content has changed.   
-2. The first new feature: automatic values storage<br/>
+1. An optimization: Normally, a **notification** is always triggered for value assignments to a (bindable) property. With this implementation this only happens if the value has effectively changed - in other words, if the content has changed.   
+2. A further feature: automatic values storage<br/>
 The base ViewModel now has a **value storage** in which the values for the (bindable) properties are stored. This means that no more private fields have to be declared in the ViewModels. This advantage brings with it a small disadvantage: when reading the values a 'cast' is necessary. For properties that are read very frequently, you should therefore use this with caution to avoid performance disadvantages. Of course, you can continue to work with private fields in the future. A mixture of both concepts within a ViewModel is not recommended with regard to the readability of the code (but is possible without problems).<br/>
     ```C#	
     public bool CanSave
@@ -383,8 +383,8 @@ The base ViewModel now has a **value storage** in which the values for the (bind
         set => this.SetPropertyValue<bool>(value);                          
     }
     ```
-3.  The second new feature: **custom command aggregator** implmentations<br/>
-It is now possible to use your own implementation of the Command Aggregator. For this purpose this implementation can be registered at the factory class. Until a possible deregistration the own implementation will be used by the factory. The condition is that the implementation has a parameterless constructor.<br/>
+3.  Another feature: **custom command aggregator** implmentations<br/>
+It is possible to use - if required - your own implementation of the Command Aggregator. For this purpose this implementation can be registered at the factory class. Until a possible deregistration the own implementation will be used by the factory. The condition is that the implementation has a parameterless constructor.<br/>
 **register:** (to use an own/custom implementation)
     ```C#	
     CommandAggregatorFactory.RegisterAggreagtorImplementation<OwnAggregator>();

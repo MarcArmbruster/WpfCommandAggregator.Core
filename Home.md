@@ -215,7 +215,7 @@ The performanceChecker instance is only a wrapper class to start and stop a stop
 
 When you like to set/change/remove these actions dynamically you can use the corresponding methods of the RelayCommand class.
 ```C#
-            RelayCommand cmd = this.CmdAgg["Print"] as RelayCommand;
+            RelayCommand cmd = this.CmdAgg["Print"].Command as RelayCommand;
             if (cmd != null)
             {
                  cmd.OverridePostActionDelegate(null);

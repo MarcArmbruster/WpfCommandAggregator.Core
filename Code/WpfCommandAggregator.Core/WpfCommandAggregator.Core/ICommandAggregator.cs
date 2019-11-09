@@ -75,6 +75,15 @@
         void AddOrSetCommand(string key, Action<object> executeDelegate, Predicate<object> canExecuteDelegate);
 
         /// <summary>
+        /// Adds or set the command.
+        /// </summary>
+        /// <param name="key">The command key.</param>
+        /// <param name="executeDelegate">The execute delegate.</param>
+        /// <param name="canExecuteDelegate">The can execute delegate.</param>
+        /// <param name="settings">The command settings.</param>
+        void AddOrSetCommand(string key, Action<object> executeDelegate, Predicate<object> canExecuteDelegate, Dictionary<string, object> settings);
+
+        /// <summary>
         /// Count of registered commands.
         /// </summary>
         /// <returns>The number of registered commands.</returns>

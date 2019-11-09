@@ -1,36 +1,34 @@
 # WPF Command Aggregator.Core
-The WPF.Core Command Aggregator is a solution to reduce WPF command definitions to an absolute minimum of code lines (only one per command).
-In addition, a BaseViewModel class (BaseVm) with an integrated command aggregator instance and the DependsOn attribute is supported.
-It is the .net Core version of the classic WpfCommandAggregator.
-A significant change is the CommandContainer. Up from this .net Core version the commands are wrapped in a container object 
-to enable the definition of additional setting values. See details below. 
+The WpfCommandAggregator.Core is an MVVM package for an easier, faster and more comfortable use of MVVM and especially of commands in the environment of WPF.Core.
+This solution is very similar to the implementation known from the .net classic environment. However, the solution was extended by the concept of the ICommandContainer, so that a logical grouping of ICommand and related information such as label texts, colors, etc. is possible.
 
-Latest stable version is available as a nuGet package (up from November 2019):<br/>
+
+Latest stable version is available as a nuGet package (up from November 9th, 2019):<br/>
 [nuGet](https://www.nuget.org/packages/WPFCommandAggregator.Core/)
 
 See also other versions on nuget:<br/>
-[nuGet: UWP Command Aggregator](https://www.nuget.org/packages/UwpCommandAggregator/)
-[nuGet: WPF Command Aggregator] (https://www.nuget.org/packages/WPFCommandAggregator/)
+* [nuGet: UWP Command Aggregator](https://www.nuget.org/packages/UwpCommandAggregator/)
+* [nuGet: WPF Command Aggregator](https://www.nuget.org/packages/WPFCommandAggregator/)
 
 ## Versions 
 - 1.0.0.0 : 
   - WPF Command Aggregator.Core
             
 
-## The Background
-
+# How it works
+## The idea
 Many years I worked on many WPF projects (MVVM) with many views and thereof with many command objects. 
 It was quite boring to write similar code for every command definition. 
 The well known RelayCommand (Josh Smith) helps a lot but there is still similar code for every command definition.
-- private ICommand member
-- public ICommand getter incl. creation logic
+* private ICommand member
+* public ICommand getter incl. creation logic
 
 If you have to create views with a lot of functionality (many customers still like screens full of data and functionalities), 
 for example ToolBars and ContextMenus also a lot of commands has to be defined.
 
 This leads to a great amount of code lines with very similar structure. 
 
-**Example (without Command Aggregator):**
+**Example (WITHOUT Command Aggregator):**
 ```C#
 private ICommand printCommand;
 public ICommand PrintCommand
@@ -48,9 +46,10 @@ public ICommand PrintCommand
 
 All we want to tell is: _PrintCommand_ executes the _Print_ method if it is allowed (_CanPrint_ property).
 
-The WPF Command Aggregator is a solution to reduce the command definitions to a very short and easy to read line of code within a view model class.
+## The aggregator and the base view model
+The WPFCommandAggregator.Core is a solution to reduce the command definitions to a very short and easy to read line of code within a view model class.
 
-**Example (with Command Aggregator):**
+**Example (WITH Command Aggregator):**
 ```C#
 this.CmdAgg.AddOrSetCommand("Print", new RelayCommand(p1 => Print(p1), p2 => CanPrint));
 ```
@@ -58,81 +57,24 @@ OR (including settings)
 ```C#
 this.CmdAgg.AddOrSetCommand("Print", new RelayCommand(p1 => Print(p1), p2 => CanPrint), new Dictionary<string, object> { { "ButtonContent", "Print me!" }});
 ```
+(many more overloads exists)
 
-This is an reduction of about 10 lines (!!!) and (in my opinion) a very easy to read command definition.
-How can this be achieved and how we can use it for bindings (XAML)?
+This is a reduction of about 10 lines (!!!!) and (in my opinion) a very well readable command definition.
+How can this be achieved and how can we use it for bindings (XAML)?
 
-## The Implementation
 
-The Command Aggreagtor is a class containing a dictionary (ConcurrentDictionary) to hold commands identified by a string (command name):
-```C#
-private readonly ConcurrentDictionary<string, ICommand> commands;
+So we have a functionality to collect commands within a CommandAggregator instance, but how can we use it - especially in bindings?
 
-public CommandAggregator()
-{
-   commands = new ConcurrentDictionary<string, ICommand>();
-}
-```
+First, the BaseVm class provides a command aggregator instance and an abstract method called _InitCommands_. The CommandAggregator instance is created by a factory class. 
+Thus we get in ViewModels (which inherit from BaseVm) the possibility to store all command definitions in the overloaded method _InitCommands_. Thus they are concentrated in one place in the class and can be easily maintained and extended.
 
-A method called _AddOrSetCommand_ (overloaded) provides the registration of new commands:
-```C#
-public void AddOrSetCommand(string key, ICommand command)
-{
-   if (string.IsNullOrEmpty(key) == false)
-   {
-	   if (this.commands.Any(k => k.Key == key))
-	   {
-		  this.commands[key] = command;
-	   }
-	   else
-	   {
-		  this.commands.AddOrUpdate(key, command, (exkey, excmd) => command);
-	   }
-   }
-}
-
-public void AddOrSetCommand(string key, Action<object> executeDelegate, Predicate<object> canExecuteDelegate)
-{
-   if (string.IsNullOrEmpty(key) == false)
-   {
-	   if (this.commands.Any(k => k.Key == key))
-	   {
-		  this.commands[key] = new RelayCommand(executeDelegate, canExecuteDelegate);
-	   }
-	   else
-	   {
-		  ICommand command = new RelayCommand(executeDelegate, canExecuteDelegate);
-		  this.commands.AddOrUpdate(key, command, (exkey, excmd) => command);
-	   }
-   }
-}
-
-public void AddOrSetCommand(string key, ICommand command, Dictionary<string, object> settings)
-{
-    if (string.IsNullOrEmpty(key) == false)
-    {
-        if (this.commandContainers.Any(k => k.Key == key))
-        {
-            this.commandContainers[key] = new CommandContainer(command, settings);
-        }
-        else
-        {
-            var commandDefinition = new CommandContainer(command, settings);
-            this.commandContainers.AddOrUpdate(key, commandDefinition, (exkey, excmd) => commandDefinition);
-        }
-    }
-}
-```
-
-So, we have the functionaliy to collect commands within a CommandAggregator class, but how we can use it - especially in Bindings?
-First of all my BaseViewModel class is provided with one CommandAggregator instance and an abstract 
-method called _InitCommands_. The CommandAggregator instance is created by a factory class. This factrory class provides also 
-the possibility to register an own and individual implementation of the ICommandAggregator interface - if required.
+The mentioned factory class for the CommandAggregator instance also offers the possibility to register an own and individual implementation of the ICommandAggregator interface - if required.
 
 ```C#
 public abstract class BaseVm : INotifyPropertyChanged
 {
-   public ICommandAggregator CmdAgg { get; } = CommandAggregatorFactory.GetNewCommandAggregator();
+   public ICommandAggregator CmdAgg { get; } 
+     = CommandAggregatorFactory.GetNewCommandAggregator();
 
    protected abstract void InitCommands();
 
@@ -158,11 +100,12 @@ public class MainVm : BaseVm
 }
 ```
 
-But there is still one problem left: How do we bind the commands?
-At this point an indexer can help us. Indexers can be used in Bindings. 
-Commands do not use TwoWay bindings, so an indexer within the CommandAggregator class enables us to establish a command binding in XAML.
+**But there is still one problem left: How do we bind the commands?**<br/>
+At this point an indexer can help us. Indexers can be used also in Bindings. 
+Commands do not require TwoWay bindings, so a readonly indexer within the CommandAggregator class enables us to establish a command binding in XAML.
 
 ```C#
+    // The indexer of the BaseVm class
     public ICommand this[string key] => this.GetCommandContainer(key);
 
     public ICommandContainer GetCommandContainer(string key)
@@ -179,7 +122,7 @@ Commands do not use TwoWay bindings, so an indexer within the CommandAggregator 
     }
 ```
 
-## Usage
+## Easy usage
 
 In XAML we can use the CommandAggregator instance of the view model like this:
 
@@ -189,13 +132,18 @@ In XAML we can use the CommandAggregator instance of the view model like this:
 
 Indexer binding works with square brackets and the name of the registered command - you do not need any quotation marks!
 
-The commands are wrapped into an ICommandContainer. This container provides the possibility to add meta data, e.g. The caption to display on a WPF-Button.
+The commands are wrapped into an ICommandContainer. 
+This container provides the possibility to add meta data, e.g. The caption to display on a WPF-Button.
+
+Example (InitCommands method)
 ```C#
 this.CmdAgg.AddOrSetCommand(
             "Exit", 
             new RelayCommand(p1 => MessageBox.Show("Exit called")),
             new Dictionary<string, object>{ { "Title", "Exit" } });
 ```
+
+Example (Usage in XAML)
 ```XAML
 <Button
     Command="{Binding CmdAgg[Exit].Command}"
@@ -203,8 +151,11 @@ this.CmdAgg.AddOrSetCommand(
 <Button
 ```
 
-The WPF Command Aggregator is working well in many projects. 
-I was able to reduce the lines of code for command definitions for more than 2000 (within my current project) without loosing any functionality! Each command definition/registration is reduced to exact one line of code.
+By this approach I was able to reduce the lines of code for command definitions 
+many thousand lines in larger projects - without loosing any functionality! 
+Each command definition/registration is reduced to exact one C# statement.
+
+# Further ICommand features
 
 ## Hierarchy command
 
@@ -271,6 +222,7 @@ When you like to set/change/remove these actions dynamically you can use the cor
                  cmd.OverridePreActionDelegate(null);
             }
 ```
+# Further features of the ViewModel base class BaseVm
 
 ## The 'DependsOn' attribute
 

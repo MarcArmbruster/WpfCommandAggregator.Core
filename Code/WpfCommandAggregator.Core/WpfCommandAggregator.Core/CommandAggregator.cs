@@ -151,6 +151,7 @@
         /// </summary>
         /// <param name="key">The command key.</param>
         /// <param name="command">The command.</param>
+        /// <param name="settings">The command settings.</param>
         public void AddOrSetCommand(string key, ICommand command, Dictionary<string, object> settings)
         {
             if (string.IsNullOrEmpty(key) == false)
@@ -189,6 +190,34 @@
                     ICommandContainer commandDefinition 
                         = new CommandContainer(new RelayCommand(executeDelegate, canExecuteDelegate));
                     
+                    this.commandContainers.AddOrUpdate(key, commandDefinition, (exkey, excmd) => commandDefinition);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Adds or set the command.
+        /// </summary>
+        /// <param name="key">The command key.</param>
+        /// <param name="executeDelegate">The execute delegate.</param>
+        /// <param name="canExecuteDelegate">The can execute delegate.</param>
+        /// <param name="settings">The command settings.</param>
+        public void AddOrSetCommand(string key, Action<object> executeDelegate, Predicate<object> canExecuteDelegate, Dictionary<string, object> settings)
+        {
+            if (string.IsNullOrEmpty(key) == false)
+            {
+                if (this.commandContainers.Any(k => k.Key == key))
+                {
+                    ICommandContainer commandDefinition
+                        = new CommandContainer(new RelayCommand(executeDelegate, canExecuteDelegate), settings);
+
+                    this.commandContainers[key] = commandDefinition;
+                }
+                else
+                {
+                    ICommandContainer commandDefinition
+                        = new CommandContainer(new RelayCommand(executeDelegate, canExecuteDelegate), settings);
+
                     this.commandContainers.AddOrUpdate(key, commandDefinition, (exkey, excmd) => commandDefinition);
                 }
             }

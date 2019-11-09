@@ -66,6 +66,11 @@
             throw new NotImplementedException();
         }
 
+        public void AddOrSetCommand(string key, Action<object> executeDelegate, Predicate<object> canExecuteDelegate, Dictionary<string, object> settings)
+        {
+            throw new NotImplementedException();
+        }
+
         public int Count()
         {
             throw new NotImplementedException();
@@ -104,6 +109,6 @@
         public void RemoveAll()
         {
             throw new NotImplementedException();
-        }
+        }        
     }
 }

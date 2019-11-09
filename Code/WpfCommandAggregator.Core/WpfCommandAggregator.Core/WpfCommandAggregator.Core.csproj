@@ -3,6 +3,16 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp3.0</TargetFramework>
     <UseWPF>true</UseWPF>
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+    <Authors>Marc Armbruster</Authors>
+    <Description>MVVM solution for efficent command definition and usage in WPF.CORE projects including a comfortable base view model</Description>
+    <Copyright>Copyright ©2019 Marc Armbruster</Copyright>
+    <PackageLicenseExpression>MS-PL</PackageLicenseExpression>
+    <PackageProjectUrl>https://github.com/MarcArmbruster/WpfCommandAggregator.Core</PackageProjectUrl>
+    <PackageIconUrl>https://github.com/MarcArmbruster/WpfCommandAggregator.Core/blob/master/WpfCmdAgg.png</PackageIconUrl>
+    <RepositoryUrl>https://github.com/MarcArmbruster/WpfCommandAggregator.Core</RepositoryUrl>
+    <RepositoryType>Github</RepositoryType>
+    <PackageReleaseNotes>Version for .net Core 3.0 and higher</PackageReleaseNotes>
   </PropertyGroup>
 
 </Project>

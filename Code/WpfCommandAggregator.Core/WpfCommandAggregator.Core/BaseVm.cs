@@ -206,10 +206,10 @@
             var eventArgs = new PropertyChangedEventArgs(propertyName);
             PropertyChanged(this, eventArgs);
 
-            if (this.AutoTriggerCommandNotification && this.CmdAgg.HasAnyCommandContainer)
-            {
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(this.CmdAgg)));
-            }
+            //if (this.CmdAgg.HasAnyCommandContainer)
+            //{
+            //    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(this.CmdAgg)));
+            //}
         }
 
         /// <summary>

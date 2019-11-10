@@ -64,17 +64,6 @@
         #region WPF Command Aggregator
 
         /// <summary>
-        /// Gets or sets a value indicating whether automatic trigger command notification is on (default = true).
-        /// </summary>
-        /// <value>
-        /// <c>true</c> if automatic trigger command notification is on; otherwise, <c>false</c>.
-        /// </value>
-        /// <remarks>
-        /// IMPORTANT: to take effect this requires the UpdateSourceTrigger=PropertyChanged setting in XAML Binding!
-        /// </remarks>
-        public bool AutoTriggerCommandNotification { get; set; } = true;
-
-        /// <summary>
         /// Gets the command aggregate.
         /// </summary>
         /// <value>

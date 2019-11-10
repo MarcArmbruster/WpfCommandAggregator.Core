@@ -14,6 +14,30 @@ See also other versions on nuget:<br/>
 - 1.0.0.0 : 
   - WPF Command Aggregator.Core
             
+## List of features
+
+### CommandAggregator
+
+Feature           |Since version
+------------------|----------
+CommandAggregator|1.0.0
+Factory/Custom Aggregator|1.0.0
+CommandContainer|1.0.0
+RelayCommand|1.0.0
+HierarchyCommands|1.0.0
+DependsOn Attribute|1.0.0
+Pre- and post action delegates|1.0.0
+
+
+### Base ViewModel (BaseVm)
+Feature           |Since version
+------------------|----------
+Included CommandAggregator instance|1.0.0
+Notification supression (SuppressNotifications flag)|1.0.0
+SetPropertyValue for backing fields|1.0.0
+SetPropertyValue<> and GetPropertyValue<> for automatic value storage|1.0.0
+DependsOn Attribute|1.0.0
+
 
 # How it works
 ## The idea
@@ -117,7 +141,7 @@ Commands do not require TwoWay bindings, so a readonly indexer within the Comman
         else
         {
             // Empty command (to avoid null reference exceptions)
-            return new CommandContainer(new RelayCommand(p1 => { }));
+            return new CommandContainer(key, new RelayCommand(p1 => { }));
         }
     }
 ```
@@ -127,7 +151,8 @@ Commands do not require TwoWay bindings, so a readonly indexer within the Comman
 In XAML we can use the CommandAggregator instance of the view model like this:
 
 ```XAML
-<Button Content="Print" Command="{Binding CmdAgg[Print].Command}" />
+<Button Content="Print" 
+        Command="{Binding CmdAgg[Print].Command}" />
 ```
 
 Indexer binding works with square brackets and the name of the registered command - you do not need any quotation marks!
@@ -138,16 +163,16 @@ This container provides the possibility to add meta data, e.g. The caption to di
 Example (InitCommands method)
 ```C#
 this.CmdAgg.AddOrSetCommand(
-            "Exit", 
-            new RelayCommand(p1 => MessageBox.Show("Exit called")),
-            new Dictionary<string, object>{ { "Title", "Exit" } });
+            "Print", 
+            new RelayCommand(p1 => Print(p1), p2 => CanPrint),
+            new Dictionary<string, object>{ { "ControlCaption", "Print me" } });
 ```
 
 Example (Usage in XAML)
 ```XAML
 <Button
-    Command="{Binding CmdAgg[Exit].Command}"
-    Content="{Binding CmdAgg[Exit][Title]}" />
+    Command="{Binding CmdAgg[Print].Command}"
+    Content="{Binding CmdAgg[Print][ControlCaption]}" />
 <Button
 ```
 

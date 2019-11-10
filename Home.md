@@ -11,8 +11,10 @@ See also other versions on nuget:<br/>
 * [nuGet: WPF Command Aggregator](https://www.nuget.org/packages/WPFCommandAggregator/)
 
 ## Versions 
-- 1.0.0.0 : 
+- 1.0.0 : 
   - WPF Command Aggregator.Core
+- 1.0.1 : 
+  - non-used public flag removed: 'AutoTriggerCommandNotification'
             
 ## List of features
 

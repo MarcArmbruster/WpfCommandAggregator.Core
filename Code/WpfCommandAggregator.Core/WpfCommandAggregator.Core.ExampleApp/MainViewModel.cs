@@ -2,6 +2,8 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Collections.ObjectModel;
+    using System.Linq;
     using System.Windows;
     using System.Windows.Input;
     using WpfCommandAggregator.Core;
@@ -29,6 +31,12 @@
     /// </remarks>
     public class MainViewModel : BaseVm
     {
+        private List<Person> allPersons = new List<Person>
+        {
+            new Person { Name = "Marc", Age = 99 },
+            new Person { Name = "Anke", Age = 19 }
+        };
+
         /// <summary>
         /// The save all checker.
         /// </summary>
@@ -54,6 +62,16 @@
         /// </summary>
         public MainViewModel()
         {
+            this.Persons = new ObservableCollectionExt<Person>();
+        }
+
+        /// <summary>
+        /// THe extended obersvable collection.
+        /// </summary>
+        public ObservableCollectionExt<Person> Persons
+        {
+            get { return this.GetPropertyValue<ObservableCollectionExt<Person>>(); }
+            private set { this.SetPropertyValue<ObservableCollectionExt<Person>>(value); }
         }
 
         private bool exampleProperty;
@@ -134,6 +152,9 @@
             this.CmdAgg.AddOrSetCommand("Options", new RelayCommand(p1 => MessageBox.Show("Options called"), p2 => true));
             this.CmdAgg.AddOrSetCommand("About", new RelayCommand(p1 => MessageBox.Show("About" + (p1 == null ? string.Empty : " [" + p1 + "]") + " called"), p2 => true));
             this.CmdAgg.AddOrSetCommand("AboutAsnyc", new RelayCommand(p1 => OpenAboutAsync(p1), p2 => true));
+            this.CmdAgg.AddOrSetCommand("AddPersons", p1 => this.AddPersons(), p2 => true);
+            this.CmdAgg.AddOrSetCommand("RemovePersons", p1 => this.RemovePersons(), p2 => this.Persons.Any());
+            this.CmdAgg.AddOrSetCommand("ReplacePerson", p1 => this.ReplacePerson(), p2 => this.Persons.Any());
 
             // Adding a hierarchy command
             ICommand save1Cmd = new RelayCommand(new Action<object>(p1 => MessageBox.Show("Save 1 called")), new Predicate<object>(p2 => this.CanSave1));
@@ -158,6 +179,30 @@
         private void OpenAboutAsync(object cmdParameter)
         {
             this.CmdAgg.ExecuteAsync("About", cmdParameter);
+        }
+
+        /// <summary>
+        /// Adds test persons to the Persons collection.
+        /// </summary>
+        private void AddPersons()
+        {
+            this.Persons.AddRange(this.allPersons);
+        }
+
+        /// <summary>
+        /// Remove test persons from the Persons collection.
+        /// </summary>
+        private void RemovePersons()
+        {
+            this.Persons.RemoveItems(this.allPersons);
+        }
+
+        /// <summary>
+        /// Replace a person by another person within the Persons collection.
+        /// </summary>
+        private void ReplacePerson()
+        {
+            this.Persons.Replace(allPersons.First(), new Person { Name = "Gerhard", Age = 27 });
         }
     }
 }

@@ -2,8 +2,9 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="Wpf Command Aggregator CORE Example"
-        Width="550"
-        Height="250" WindowStartupLocation="CenterScreen">
+        Width="600"
+        Height="600" 
+        WindowStartupLocation="CenterScreen">
     <Window.InputBindings>
         <KeyBinding
             Key="P"
@@ -73,7 +74,7 @@
             </StackPanel>
         </Border>
 
-        <Grid Margin="20">
+        <Grid Margin="20" DockPanel.Dock="Top">
             <Grid.RowDefinitions>
                 <RowDefinition Height="26" />
                 <RowDefinition Height="30" />
@@ -111,5 +112,28 @@
                 Text="{Binding Path=Result, UpdateSourceTrigger=PropertyChanged, Mode=OneWay, FallbackValue='0'}" />
 
         </Grid>
+
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="36"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <StackPanel Orientation="Horizontal">
+                <Button Command="{Binding CmdAgg[AddPersons].Command}" Template="{StaticResource buttonTemplate}">Add</Button>
+                <Button Command="{Binding CmdAgg[RemovePersons].Command}" Template="{StaticResource buttonTemplate}">Remove</Button>
+                <Button Command="{Binding CmdAgg[ReplacePerson].Command}" Template="{StaticResource buttonTemplate}">Replace</Button>
+            </StackPanel>
+            <DataGrid Grid.Row="1" 
+                      AutoGenerateColumns="False" 
+                      ItemsSource="{Binding Persons, UpdateSourceTrigger=PropertyChanged, Mode=OneWay}">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Name" Binding="{Binding Name}"/>
+                    <DataGridTextColumn Header="Age" Binding="{Binding Age}"/>
+                </DataGrid.Columns>
+            </DataGrid>
+
+        </Grid>
+        
     </DockPanel>
 </Window>

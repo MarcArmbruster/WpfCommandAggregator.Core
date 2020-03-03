@@ -138,6 +138,12 @@
             get => this.firstInput + this.secondInput;
         }
 
+        public bool FirstValueHasFocus
+        {
+            get => this.GetPropertyValue<bool>();
+            set => this.SetPropertyValue<bool>(value);
+        }
+
         /// <summary>
         /// Initializes the commands.
         /// </summary>
@@ -146,7 +152,7 @@
             // AddOrSetCommand method is overridden --> provide ICommad or Action / Predicate delegates            
             this.CmdAgg.AddOrSetCommand(
                 "Exit", 
-                new RelayCommand(p1 => MessageBox.Show("Exit called")),
+                new RelayCommand(p1 => this.CloseWindow()),
                 new Dictionary<string, object>{ { "Title", "Exit" } });
             this.CmdAgg.AddOrSetCommand("Print", new RelayCommand(p1 => MessageBox.Show("Print called"), p2 => true, this.performanceChecker.Start, this.performanceChecker.Stop));
             this.CmdAgg.AddOrSetCommand("Options", new RelayCommand(p1 => MessageBox.Show("Options called"), p2 => true));
@@ -155,6 +161,7 @@
             this.CmdAgg.AddOrSetCommand("AddPersons", p1 => this.AddPersons(), p2 => true);
             this.CmdAgg.AddOrSetCommand("RemovePersons", p1 => this.RemovePersons(), p2 => this.Persons.Any());
             this.CmdAgg.AddOrSetCommand("ReplacePerson", p1 => this.ReplacePerson(), p2 => this.Persons.Any());
+            this.CmdAgg.AddOrSetCommand("MoveFocus", p1 => this.MoveFocus(), p2 => true);
 
             // Adding a hierarchy command
             ICommand save1Cmd = new RelayCommand(new Action<object>(p1 => MessageBox.Show("Save 1 called")), new Predicate<object>(p2 => this.CanSave1));
@@ -170,6 +177,16 @@
 
             saveAllCmd.AddChildsCommand(new List<ICommand> { save1Cmd, save2Cmd });
             this.CmdAgg.AddOrSetCommand("SaveAll", saveAllCmd);
+        }
+
+        /// <summary>
+        /// Closes the (main) window by using the WindowCloser.
+        /// </summary>
+        private void CloseWindow()
+        {
+            // setting the value to true (or false) will close the window using this instance as its DataContext
+            // and uses the attached property.
+            this.WindowResult = true;
         }
 
         /// <summary>
@@ -203,6 +220,14 @@
         private void ReplacePerson()
         {
             this.Persons.Replace(allPersons.First(), new Person { Name = "Gerhard", Age = 27 });
+        }
+
+        /// <summary>
+        /// Toggle the focus on the input field 'First value'
+        /// </summary>
+        private void MoveFocus()
+        {
+            this.FirstValueHasFocus = !this.FirstValueHasFocus;
         }
     }
 }

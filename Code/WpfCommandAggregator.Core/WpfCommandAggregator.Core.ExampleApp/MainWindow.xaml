@@ -1,6 +1,8 @@
 ﻿<Window x:Class="WpfCommandAggregator.Core.ExampleApp.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:ap="clr-namespace:WPFCommandAggregator.Core.AttachedProperties;assembly=WPFCommandAggregator.Core"
+        ap:WindowCloser.WindowResult="{Binding WindowResult, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
         Title="Wpf Command Aggregator CORE Example"
         Width="600"
         Height="600" 
@@ -54,6 +56,11 @@
                     CommandParameter="async"
                     Content="AboutAsnyc"
                     Template="{StaticResource buttonTemplate}" />
+                <Button
+                    Command="{Binding CmdAgg[MoveFocus].Command}"
+                    Content="Set/remove Focus"
+                    ToolTip="sets or removes the focus of the 'First value' input field (attached property example)"
+                    Template="{StaticResource buttonTemplate}" />
             </WrapPanel>
         </Border>
 
@@ -98,6 +105,7 @@
                 Grid.Column="2"
                 Content="Sum" />
             <TextBox
+                ap:Focused.Focused="{Binding Path=FirstValueHasFocus, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" 
                 Grid.Row="1"
                 Grid.Column="0"
                 Text="{Binding Path=FirstInput, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay, FallbackValue='0'}" />

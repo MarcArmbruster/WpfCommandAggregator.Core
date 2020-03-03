@@ -48,6 +48,17 @@
         /// </summary>
         public bool SuppressNotifications { get; set; }
 
+        /// <summary>
+        /// This property is used by the attached property 'WindowCloser'. 
+        /// If this attached property is attached to a window, this WindowResult property can be used to close the window 
+        /// from this current view model by setting value to true or false. A null value will not close the window.
+        /// </summary>
+        public bool? WindowResult
+        {
+            get => this.GetPropertyValue<bool?>();
+            set => this.SetPropertyValue<bool?>(value);
+        }
+
         #region Constructor
 
         /// <summary>

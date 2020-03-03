@@ -24,5 +24,6 @@ namespace WpfCommandAggregator.Core.ExampleApp
         {
             InitializeComponent();
         }
+
     }
 }

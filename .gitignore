@@ -33,3 +33,7 @@
 /Code/WpfCommandAggregator.Core/WpfCommandAggregator.Core.ExampleApp/bin/Release/netcoreapp3.0
 /Code/WpfCommandAggregator.Core/WpfCommandAggregator.Core/bin/Release
 /Code/WpfCommandAggregator.Core/UnitTests/bin/Release/netcoreapp3.0
+/Code/WpfCommandAggregator.Core/UnitTests/bin/Release/netcoreapp3.1
+/Code/WpfCommandAggregator.Core/UnitTests/bin/Debug/netcoreapp3.1
+/Code/WpfCommandAggregator.Core/UnitTests/bin
+/Code/WpfCommandAggregator.Core/WpfCommandAggregator.Core.ExampleApp/bin

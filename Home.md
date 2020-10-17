@@ -11,10 +11,17 @@ See also other versions on nuget:<br/>
 * [nuGet: WPF Command Aggregator](https://www.nuget.org/packages/WPFCommandAggregator/)
 
 ## Versions 
-- 1.0.0 : 
-  - WPF Command Aggregator.Core
+- 1.1.0.0
+  - Upgrade to .net Core 3.1 (LTS version)
+  - new: ObservableCollectionExt extends ObservableCollection with fast 
+    AddRange, RemoveItems methods and also a Replace method
+    The class is placed in the namespace System.Collections.ObjectModel.
+  - new: Attached properties for managing focus and closing windows via view model properties.
 - 1.0.1 : 
   - non-used public flag removed: 'AutoTriggerCommandNotification'
+- 1.0.0 : 
+  - WPF Command Aggregator.Core
+
             
 ## List of features
 
@@ -40,6 +47,12 @@ SetPropertyValue for backing fields|1.0.0
 SetPropertyValue<> and GetPropertyValue<> for automatic value storage|1.0.0
 DependsOn Attribute|1.0.0
 
+### Additional Features
+Feature           |Since version
+------------------|----------
+ObservableCollectionExt|1.1.0
+AttachedProperty Focused|1.1.0
+AttachedProperty WindowResult|1.1.0
 
 # How it works
 ## The idea
@@ -372,6 +385,59 @@ It is possible to use - if required - your own implementation of the Command Agg
     ```C#	
     CommandAggregatorFactory.UnregisterAggreagtorImplementation<OwnAggregator>();
     // now the default aggregator will be used again!
+    ```
+
+## Version 1.1.0.0: ObservableCollectionExt, attached properties Focus and WindowCloser
+
+The version 1.1.0.0 contains three new features.
+
+1. The class ObservableCollectionExt extends the well-known framework class ObservableCollection with fast methods to add and reduce multiple elements. A replace method has also been created that exchanges elements in the collection.<br/>   
+    ```C#	
+    public ObservableCollectionExt<Person> Persons
+    {
+        get { return this.GetPropertyValue<ObservableCollectionExt<Person>>(); }
+        private set { this.SetPropertyValue<ObservableCollectionExt<Person>>(value); }
+    }
+
+    private void Test()
+    {
+        this.Persons.AddRange(this.allPersons);
+        this.Persons.RemoveItems(this.allPersons);
+        this.Persons.Replace(allPersons.First(), new Person { Name = "Gerhard", Age = 27 });
+    }
+    ```
+2. Attached property to set/remove focus from a Control.<br/>
+
+    ```XAML	
+     <TextBox
+                ap:Focused.Focused="{Binding Path=FirstValueHasFocus, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" 
+                Grid.Row="1"
+                Grid.Column="0">
+     </TextBox>
+    ```
+3.  The third new feature: is an attached property to close views from the view model.<br/>
+
+    ```C#	
+    private void CloseWindow()
+    {
+        // setting the value to true (or false) will close the window using this instance as its DataContext
+        // and uses the attached property.
+        // The property itself is defined in class BaseVm.
+        this.WindowResult = true;
+    }
+    ```
+    
+    ```XAML	
+    <Window
+    x:Class="CommandAggregatorExample.MainWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:ap="clr-namespace:WPFCommandAggregator.AttachedProperties;assembly=WPFCommandAggregator"
+    ap:WindowCloser.WindowResult="{Binding WindowResult, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+    Title="Command Aggregator Example"
+    Width="600"
+    Height="600"
+    WindowStartupLocation="CenterScreen"/>
     ```
 
 (see also the example solution (source code))

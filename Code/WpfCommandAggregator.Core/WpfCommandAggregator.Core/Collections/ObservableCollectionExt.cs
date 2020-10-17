@@ -87,8 +87,6 @@
                 return;
             }
 
-            int countBeforeAdding = this.Count;
-
             foreach (var item in itemsToAdd)
             {
                 this.Items.Add(item);
@@ -113,8 +111,6 @@
             {
                 return;
             }
-
-            int countBeforeRemoving = this.Count;
 
             foreach (var item in itemsToRemove)
             {

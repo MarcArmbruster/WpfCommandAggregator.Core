@@ -49,6 +49,14 @@
         }
 
         /// <summary>
+        /// Clears any custom aggregator registration.
+        /// </summary>
+        public static void ClearRegistration()
+        {
+            externalAggregatorType = null;
+        }
+
+        /// <summary>
         /// Gets the new command aggregator.
         /// </summary>
         /// <returns></returns>
@@ -59,7 +67,7 @@
                 ICommandAggregator aggregator = Activator.CreateInstance(externalAggregatorType) as ICommandAggregator;
                 if (aggregator == null)
                 {
-                    throw new InvalidCastException("Registered aggregator type could not handled as a valid command aggregator");
+                    throw new InvalidCastException("The registered aggregator type could not be treated as a valid command aggregator");
                 }
 
                 return aggregator;

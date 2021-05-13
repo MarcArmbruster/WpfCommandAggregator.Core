@@ -122,5 +122,103 @@
             this.OnPropertyChanged(new PropertyChangedEventArgs(nameof(this.Count)));
             this.OnPropertyChanged(new PropertyChangedEventArgs(nameof(this.Items)));
         }
+
+        /// <summary>
+        /// Execute the given action for each collection item.
+        /// </summary>
+        /// <param name="action">Action to execute.</param>
+        public void ForEach(Action<T> action)
+        {
+            if (action == null)
+            {
+                throw new InvalidOperationException("Action cannot be null");
+            }
+
+            foreach (var item in this.Items)
+            {
+                action.Invoke(item);
+            }
+
+            this.OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
+            this.OnPropertyChanged(new PropertyChangedEventArgs(nameof(this.Items)));
+        }
+
+        /// <summary>
+        /// Execute the given actions for each collection item.
+        /// The actions will be executed in order of params array.
+        /// </summary>
+        /// <param name="actions">Actions to execute.</param>
+        public void ForEach(params Action<T>[] actions)
+        {
+            if (actions == null)
+            {
+                throw new InvalidOperationException("Actions cannot be null");
+            }
+
+            foreach (var item in this.Items)
+            {
+                foreach (Action<T> action in actions)
+                {
+                    action.Invoke(item);
+                }
+            }
+
+            this.OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
+            this.OnPropertyChanged(new PropertyChangedEventArgs(nameof(this.Items)));
+        }
+
+        /// <summary>
+        /// Execute the given action for each collection item that fullfills the given condition.
+        /// </summary>
+        /// <param name="action">Action to execute.</param>
+        /// <param name="condition">The condition.</param>
+        public void ForEach(Action<T> action, Predicate<T> condition)
+        {
+            if (action == null)
+            {
+                throw new InvalidOperationException("Action cannot be null");
+            }
+
+            if (condition == null)
+            {
+                throw new InvalidOperationException("Condition cannot be null");
+            }
+
+            foreach (var item in this.Items.Where(i => condition.Invoke(i) == true))
+            {
+                action.Invoke(item);
+            }
+
+            this.OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
+            this.OnPropertyChanged(new PropertyChangedEventArgs(nameof(this.Items)));
+        }
+
+        /// <summary>
+        /// Verifies if all items fullfill the given condition.
+        /// </summary>
+        /// <param name="condition">The condition.</param>
+        public bool TrueForAll(Predicate<T> condition)
+        {
+            if (condition == null)
+            {
+                throw new InvalidOperationException("Condition cannot be null");
+            }
+
+            return this.All(i => condition.Invoke(i) == true);
+        }
+
+        /// <summary>
+        /// Verifies if all items do not fullfill the given condition.
+        /// </summary>
+        /// <param name="condition">The condition.</param>
+        public bool FalseForAll(Predicate<T> condition)
+        {
+            if (condition == null)
+            {
+                throw new InvalidOperationException("Condition cannot be null");
+            }
+
+            return this.All(i => condition.Invoke(i) == false);
+        }
     }
 }

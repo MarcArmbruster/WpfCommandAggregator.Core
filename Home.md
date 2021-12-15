@@ -1,5 +1,5 @@
 # WPF Command Aggregator.Core
-The WpfCommandAggregator.Core is an MVVM package for an easier, faster and more comfortable use of MVVM and especially of commands in the environment of WPF.Core.
+The WpfCommandAggregator.Core is an MVVM package for an easier, faster and more comfortable use of MVVM and especially of commands in the environment of WPF.Core (WPF.NET).
 This solution is very similar to the implementation known from the .net classic environment. However, the solution was extended by the concept of the ICommandContainer, so that a logical grouping of ICommand and related information such as label texts, colors, etc. is possible.
 
 

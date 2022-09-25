@@ -73,8 +73,21 @@
             }
         }
 
+        /////// <summary>
+        /////// Adds multiple items with a notification after each single item.
+        /////// Bad performance! - Only for DEMO (see dotnetpro article 12/2022)
+        /////// </summary>
+        /////// <param name="itemsToAdd">The items to add.</param>
+        ////public void AddRange(IEnumerable<T> itemsToAdd)
+        ////{
+        ////    foreach (var item in itemsToAdd)
+        ////    {
+        ////        this.Add(item);
+        ////    }
+        ////}
+
         /// <summary>
-        /// Adds multiple items without nofiy after each single item.
+        /// Adds multiple items without notify after each single item.
         /// (better performance than loops with single Add calls).
         /// </summary>
         /// <param name="itemsToAdd">The items to add.</param>

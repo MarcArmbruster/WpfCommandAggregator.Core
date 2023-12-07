@@ -1,23 +1,26 @@
 <Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <TargetFramework>net6.0-windows7.0</TargetFramework>
     <UseWPF>true</UseWPF>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <Authors>Marc Armbruster</Authors>
-    <Description>MVVM solution for efficent command definition and usage in WPF.CORE projects including a comfortable base view model</Description>
-    <Copyright>Copyright ©2019-2020 Marc Armbruster</Copyright>
+    <Description>MVVM solution for efficent command definition and usage in WPF .NET (&gt;=6) projects including a comfortable base view model</Description>
+    <Copyright>Copyright ©2019-2023 Marc Armbruster</Copyright>
     <PackageLicenseExpression>MS-PL</PackageLicenseExpression>
     <ProjectUrl>https://github.com/MarcArmbruster/WpfCommandAggregator.Core</ProjectUrl>
     <IconUrl>https://github.com/MarcArmbruster/WpfCommandAggregator.Core/blob/master/WpfCmdAgg.png</IconUrl>
     <RepositoryUrl>https://github.com/MarcArmbruster/WpfCommandAggregator.Core</RepositoryUrl>
     <RepositoryType>Github</RepositoryType>
-    <PackageReleaseNotes>Version for .net Core 3.1 (LTS) and higher</PackageReleaseNotes>
-    <PackageTags>WPF Core MVVM Command Aggregator Pattern C#</PackageTags>
-    <AssemblyVersion>1.1.0.0</AssemblyVersion>
-    <FileVersion>1.1.0.0</FileVersion>
-    <Version>1.1.0</Version>
+    <PackageReleaseNotes>Version for .NET 6 and higher</PackageReleaseNotes>
+    <PackageTags>WPF Core .NET MVVM Command Aggregator Pattern C#</PackageTags>
+    <AssemblyVersion>2.0.0.0</AssemblyVersion>
+    <FileVersion>2.0.0.0</FileVersion>
+    <Version>2.0.0</Version>
     <PackageProjectUrl>https://github.com/MarcArmbruster/WpfCommandAggregator.Core</PackageProjectUrl>
+    <PackageId>WpfCommandAggregator.Core</PackageId>
+    <Title>WpfCommandAggregator for .NET</Title>
+    <PackageReadmeFile></PackageReadmeFile>
   </PropertyGroup>
 
 </Project>

@@ -4,6 +4,7 @@
     using System.Collections.Concurrent;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Text.Json.Serialization;
     using System.Threading.Tasks;
     using System.Windows.Input;
 
@@ -91,6 +92,7 @@
         /// </value>
         /// <param name="key">The command key.</param>
         /// <returns>The command for the given key (Empty command if not found/exists).</returns>
+        [JsonIgnore]
         public ICommandContainer this[string key] => this.GetCommandContainer(key);
 
         /// <summary>
@@ -99,6 +101,7 @@
         /// <value>
         /// <c>true</c> if this instance has any command; otherwise, <c>false</c>.
         /// </value>
+        [JsonIgnore] 
         public bool HasAnyCommandContainer => this.commandContainers.Any();
 
         #endregion Properties

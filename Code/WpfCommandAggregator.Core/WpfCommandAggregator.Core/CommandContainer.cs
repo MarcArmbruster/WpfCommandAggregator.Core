@@ -1,6 +1,7 @@
 ﻿namespace WpfCommandAggregator.Core
 {
     using System.Collections.Generic;
+    using System.Text.Json.Serialization;
     using System.Windows.Input;
 
     /// <summary>
@@ -28,11 +29,13 @@
         /// <summary>
         /// Gets or sets the command itself.
         /// </summary>
+        [JsonIgnore] 
         public ICommand Command { get; set; }
 
         /// <summary>
         /// Gets the dictionary of command settings.
         /// </summary>
+        [JsonIgnore] 
         public Dictionary<string, object> Settings { get; private set; } = new Dictionary<string, object>();
 
         /// <summary>
@@ -62,6 +65,7 @@
         /// </summary>
         /// <param name="settingKey"></param>
         /// <returns>The value of the setting.</returns>
+        [JsonIgnore]
         public object this[string settingKey]
         {
             get

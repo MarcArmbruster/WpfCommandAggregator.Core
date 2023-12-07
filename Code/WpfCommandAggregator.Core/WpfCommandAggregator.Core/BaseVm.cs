@@ -7,6 +7,7 @@
     using System.Linq;
     using System.Reflection;
     using System.Runtime.CompilerServices;
+    using System.Text.Json.Serialization;
 
     /// <summary>
     /// Base View Model
@@ -46,6 +47,7 @@
         /// Set to true if you want to supress all notifications.
         /// Default is false (active notifications).
         /// </summary>
+        [JsonIgnore]
         public bool SuppressNotifications { get; set; }
 
         /// <summary>
@@ -53,6 +55,7 @@
         /// If this attached property is attached to a window, this WindowResult property can be used to close the window 
         /// from this current view model by setting value to true or false. A null value will not close the window.
         /// </summary>
+        [JsonIgnore]
         public bool? WindowResult
         {
             get => this.GetPropertyValue<bool?>();
@@ -71,7 +74,7 @@
         }
 
         #endregion Constructor     
-        
+
         #region WPF Command Aggregator
 
         /// <summary>
@@ -80,13 +83,14 @@
         /// <value>
         /// The command aggregate.
         /// </value>
+        [JsonIgnore]
         public ICommandAggregator CmdAgg { get; } = CommandAggregatorFactory.GetNewCommandAggregator();
 
         /// <summary>
         /// Initializes the commands - has to be overridden in derived classes.
         /// This is the place to register your view model specific commands.
         /// </summary>
-        protected abstract void InitCommands();
+        protected virtual void InitCommands() { }
 
         #endregion WPF Command Aggregator
 

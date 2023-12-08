@@ -11,6 +11,10 @@ See also other versions on nuget:<br/>
 * [nuGet: WPF Command Aggregator](https://www.nuget.org/packages/WPFCommandAggregator/)
 
 ## Versions 
+- 2.0.0.0
+    - InitCommands method within BaseVm was set from abstract to virtual
+    - Target Framework set to .NET 6 (or higher). 
+    If .NET3.1 or .NET5 must be supported, you can still use version 1.1.0.0 
 - 1.1.0.0
   - Upgrade to .net Core 3.1 (LTS version)
   - new: ObservableCollectionExt extends ObservableCollection with fast 

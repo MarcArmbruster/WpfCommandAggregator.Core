@@ -45,6 +45,7 @@ Pre- and post action delegates|1.0.0
 ### Base ViewModel (BaseVm)
 Feature           |Since version
 ------------------|----------
+Method InitCommands set to virtual ( not abstract)|2.0.0
 Included CommandAggregator instance|1.0.0
 Notification supression (SuppressNotifications flag)|1.0.0
 SetPropertyValue for backing fields|1.0.0
@@ -390,6 +391,10 @@ It is possible to use - if required - your own implementation of the Command Agg
     CommandAggregatorFactory.UnregisterAggreagtorImplementation<OwnAggregator>();
     // now the default aggregator will be used again!
     ```
+
+## Version 2.0.0.0: virtual InitCommands
+The method InitCommands of the base view model (BaseVm) was changed from abstratc definition to virtual implementation.
+Therefore you do not need to override the method if you don't need any commands in your view model.
 
 ## Version 1.1.0.0: ObservableCollectionExt, attached properties Focus and WindowCloser
 

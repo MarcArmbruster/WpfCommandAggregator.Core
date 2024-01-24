@@ -7,7 +7,12 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WpfCommandAggregator.Core.E
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WpfCommandAggregator.Core", "WpfCommandAggregator.Core\WpfCommandAggregator.Core.csproj", "{2310FF45-6CA4-49B3-87F8-35B51588DB51}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WpfCommandAggregator.Core.Tests", "WpfCommandAggregator.Core.Tests\WpfCommandAggregator.Core.Tests.csproj", "{005093DA-EB67-4E21-97C1-A4A24212B329}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WpfCommandAggregator.Core.Tests", "WpfCommandAggregator.Core.Tests\WpfCommandAggregator.Core.Tests.csproj", "{005093DA-EB67-4E21-97C1-A4A24212B329}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{41702434-24ED-4C06-BAF8-3351A459E9A0}"
+	ProjectSection(SolutionItems) = preProject
+		..\..\Home.md = ..\..\Home.md
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -1,21 +1,21 @@
 <Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
 
   <PropertyGroup>
-    <TargetFramework>net8.0-windows10.0.17763.0</TargetFramework>
+    <TargetFramework>net9.0-windows10.0.17763.0</TargetFramework>
     <UseWPF>true</UseWPF>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <Authors>Marc Armbruster</Authors>
-    <Description>MVVM solution for efficent command definition and usage in WPF .NET8 projects including a comfortable base view model</Description>
+    <Description>MVVM solution for efficent command definition and usage in WPF .NET9 projects including a comfortable base view model</Description>
     <Copyright>Copyright ©2019-2025 Marc Armbruster</Copyright>
     <ProjectUrl>https://github.com/MarcArmbruster/WpfCommandAggregator.Core</ProjectUrl>
     <IconUrl>https://github.com/MarcArmbruster/WpfCommandAggregator.Core/blob/master/WpfCmdAgg.png</IconUrl>
     <RepositoryUrl>https://github.com/MarcArmbruster/WpfCommandAggregator.Core</RepositoryUrl>
     <RepositoryType>Github</RepositoryType>
-    <PackageReleaseNotes>Version for .NET 8</PackageReleaseNotes>
+    <PackageReleaseNotes>Version for .NET 9</PackageReleaseNotes>
     <PackageTags>WPF Core .NET MVVM Command Aggregator Pattern C#</PackageTags>
-    <AssemblyVersion>8.0.0.0</AssemblyVersion>
-    <FileVersion>8.0.0.0</FileVersion>
-    <Version>8.0.0</Version>
+    <AssemblyVersion>9.0.0.0</AssemblyVersion>
+    <FileVersion>9.0.0.0</FileVersion>
+    <Version>9.0.0</Version>
     <PackageProjectUrl>https://github.com/MarcArmbruster/WpfCommandAggregator.Core</PackageProjectUrl>
     <PackageId>WpfCommandAggregator.Core</PackageId>
     <Title>WpfCommandAggregator for .NET</Title>

@@ -18,9 +18,11 @@ See also other versions on nuget:<br/>
 * [nuGet: WPF Command Aggregator](https://www.nuget.org/packages/WPFCommandAggregator/)
 
 ## Versions 
+- 9.0.0.0
+    - Targets .NET9
 - 8.0.0.0
     - Targets .NET8
-    - Nullable behavior optimized
+    - Null handling/behavior optimized
 - 2.0.0.0
     - InitCommands method within BaseVm was set from abstract to virtual
     - Target Framework set to .NET 6 (or higher). 

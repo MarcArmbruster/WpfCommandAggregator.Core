@@ -40,7 +40,7 @@
         [TestMethod]
         public void GetNewCommandAggregatorCustomWithContainerTest()
         {
-            ICommandContainer container = new CommandContainer(new RelayCommand(new Action<object>(o => { })));
+            ICommandContainer container = new CommandContainer(new RelayCommand(new Action<object?>(o => { })));
             container.Settings.Add("A", true);
 
             CommandAggregatorFactory.RegisterAggreagtorImplementation<FakeAggregator>();

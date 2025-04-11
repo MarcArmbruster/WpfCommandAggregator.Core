@@ -22,7 +22,7 @@
         public void DefaultTest()
         {
             LocalTestingClass testObject = new LocalTestingClass();
-            ICommand cmd = new RelayCommand(p1 => testObject.Test = p1.ToString(), p2 => true);
+            ICommand cmd = new RelayCommand(p1 => testObject.Test = p1?.ToString() ?? string.Empty, p2 => true);
             cmd.Execute("defaulttest");
 
             Assert.AreEqual("defaulttest", testObject.Test);
@@ -36,7 +36,7 @@
 
             Action preAction = new Action(() => testObject.Test = "start");
 
-            ICommand cmd = new RelayCommand(p1 => testObject.Test += p1.ToString(), p2 => true, preAction, null);
+            ICommand cmd = new RelayCommand(p1 => testObject.Test += (p1?.ToString() ?? string.Empty), p2 => true, preAction, null);
             cmd.Execute("pretest");
 
             Assert.AreEqual("startpretest", testObject.Test);
@@ -50,7 +50,7 @@
 
             Action postAction = new Action(() => testObject.Test += "end");
 
-            ICommand cmd = new RelayCommand(p1 => testObject.Test += p1.ToString(), p2 => true, null, postAction);
+            ICommand cmd = new RelayCommand(p1 => testObject.Test += (p1?.ToString() ?? string.Empty), p2 => true, null, postAction);
             cmd.Execute("pretest");
 
             Assert.AreEqual("pretestend", testObject.Test);

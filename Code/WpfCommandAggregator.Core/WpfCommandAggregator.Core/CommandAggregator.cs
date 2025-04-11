@@ -3,6 +3,7 @@
     using System;
     using System.Collections.Concurrent;
     using System.Collections.Generic;
+    using System.Diagnostics.CodeAnalysis;
     using System.Linq;
     using System.Text.Json.Serialization;
     using System.Threading.Tasks;
@@ -35,37 +36,28 @@
     /// </remarks>
     public class CommandAggregator : ICommandAggregator
     {
-        #region Private Members
-
         /// <summary>
         /// The private (thread save) collection of command containers.
         /// </summary>
-        private readonly ConcurrentDictionary<string, ICommandContainer> commandContainers;
-
-        #endregion Private Members
-
-        #region Constructors
+        private readonly ConcurrentDictionary<string, ICommandContainer?> commandContainers = [];
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CommandAggregator"/> class.
         /// </summary>
         public CommandAggregator()
         {
-            this.commandContainers = new ConcurrentDictionary<string, ICommandContainer>();
         }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CommandAggregator"/> class.
         /// </summary>
         /// <param name="commandContainers">The command containerss.</param>
-        public CommandAggregator(IEnumerable<KeyValuePair<string, ICommandContainer>> commandContainers) : this()
+        public CommandAggregator(IEnumerable<KeyValuePair<string, ICommandContainer>> commandContainers)
         {
-            if (this.commandContainers != null)
+            foreach (KeyValuePair<string, ICommandContainer> item 
+                            in commandContainers.Where(i => i.Key != null && i.Value != null))
             {
-                foreach (KeyValuePair<string, ICommandContainer> item in commandContainers.Where(i => i.Key != null && i.Value != null))
-                {
-                    this.AddOrSetCommand(item.Key, item.Value);
-                }
+                this.AddOrSetCommand(item.Key, item.Value);
             }
         }
 
@@ -76,10 +68,6 @@
         {
             this.commandContainers.Clear();
         }
-
-        #endregion Constructors
-
-        #region Properties
 
         /// <summary>
         /// Gets the <see cref="ICommand"/> with the specified key.
@@ -104,26 +92,22 @@
         [JsonIgnore] 
         public bool HasAnyCommandContainer => this.commandContainers.Any();
 
-        #endregion Properties
-
-        #region Methods
-
         /// <summary>
         /// Adds or set the command.
         /// </summary>
         /// <param name="key">The command key.</param>
-        /// <param name="command">The command.</param>
-        public void AddOrSetCommand(string key, ICommandContainer command)
+        /// <param name="commandContainer">The command container.</param>
+        public void AddOrSetCommand([NotNull] string key, ICommandContainer? commandContainer)
         {
             if (string.IsNullOrEmpty(key) == false)
             {
                 if (this.commandContainers.Any(k => k.Key == key))
                 {
-                    this.commandContainers[key] = command;
+                    this.commandContainers[key] = commandContainer;
                 }
                 else
                 {
-                    this.commandContainers.AddOrUpdate(key, command, (exkey, excmd) => command);
+                    this.commandContainers.AddOrUpdate(key, commandContainer, (exkey, excmd) => commandContainer);
                 }
             }
         }
@@ -133,9 +117,9 @@
         /// </summary>
         /// <param name="key">The command key.</param>
         /// <param name="command">The command.</param>
-        public void AddOrSetCommand(string key, ICommand command)
+        public void AddOrSetCommand([NotNull] string key, ICommand? command)
         {
-            if (string.IsNullOrEmpty(key) == false)
+            if (string.IsNullOrEmpty(key) == false && command != null)
             {
                 if (this.commandContainers.Any(k => k.Key == key))
                 {
@@ -155,9 +139,9 @@
         /// <param name="key">The command key.</param>
         /// <param name="command">The command.</param>
         /// <param name="settings">The command settings.</param>
-        public void AddOrSetCommand(string key, ICommand command, Dictionary<string, object> settings)
+        public void AddOrSetCommand([NotNull] string key, ICommand? command, Dictionary<string, object?>? settings)
         {
-            if (string.IsNullOrEmpty(key) == false)
+            if (string.IsNullOrEmpty(key) == false && command != null)
             {
                 if (this.commandContainers.Any(k => k.Key == key))
                 {
@@ -177,7 +161,7 @@
         /// <param name="key">The command key.</param>
         /// <param name="executeDelegate">The execute delegate.</param>
         /// <param name="canExecuteDelegate">The can execute delegate.</param>
-        public void AddOrSetCommand(string key, Action<object> executeDelegate, Predicate<object> canExecuteDelegate)
+        public void AddOrSetCommand([NotNull] string key, Action<object?>? executeDelegate, Predicate<object?>? canExecuteDelegate)
         {
             if (string.IsNullOrEmpty(key) == false)
             {
@@ -205,7 +189,11 @@
         /// <param name="executeDelegate">The execute delegate.</param>
         /// <param name="canExecuteDelegate">The can execute delegate.</param>
         /// <param name="settings">The command settings.</param>
-        public void AddOrSetCommand(string key, Action<object> executeDelegate, Predicate<object> canExecuteDelegate, Dictionary<string, object> settings)
+        public void AddOrSetCommand(
+            [NotNull] string key, 
+            Action<object?>? executeDelegate, 
+            Predicate<object?>? canExecuteDelegate, 
+            Dictionary<string, object?>? settings)
         {
             if (string.IsNullOrEmpty(key) == false)
             {
@@ -230,11 +218,8 @@
         /// Counts the registered commands.
         /// </summary>
         /// <returns>Number of registered commands.</returns>
-        public int Count()
-        {
-            return this.commandContainers.Count;
-        }
-
+        public int Count() => this.commandContainers.Count;
+        
         /// <summary>
         /// Executes the command asynchronous.
         /// IMPORTANT: This assumes the possible asynchronous call/execution of the action delegate!
@@ -245,7 +230,7 @@
         /// The created Task.
         /// </returns>
         /// <exception cref="CommandNotDefinedException">Command with such a key is actually not registered.</exception>
-        public Task ExecuteAsync(string key, object parameter = null)
+        public Task ExecuteAsync([NotNull] string key, object? parameter = null)
         {
             if (this.Exists(key) == false)
             {
@@ -260,21 +245,18 @@
         /// </summary>
         /// <param name="key">The command key.</param>
         /// <returns></returns>
-        public bool Exists(string key)
-        {
-            return this.commandContainers.Any(k => k.Key == key);
-        }
-
+        public bool Exists([NotNull] string key) => this.commandContainers.Any(k => k.Key == key);
+        
         /// <summary>
         /// Gets the command container. If command container not exists, a ontainer with a dummy Action delegate will be returned (doing nothing).
         /// </summary>
         /// <param name="key">The command key.</param>
         /// <returns>The command for the given key (Empty command if not found/exists).</returns>
-        public ICommandContainer GetCommandContainer(string key)
+        public ICommandContainer GetCommandContainer([NotNull] string key)
         {
             if (this.commandContainers.Any(k => k.Key == key))
             {
-                return this.commandContainers[key];
+                return this.commandContainers[key] ?? new CommandContainer(null);
             }
             else
             {
@@ -289,7 +271,7 @@
         /// <param name="key">The command key.</param>
         /// <returns>True if ICommand is null, false otherwise.</returns>
         /// <exception cref="CommandNotDefinedException">Command with this key is not registered, yet.</exception>
-        public bool HasNullCommandContainer(string key)
+        public bool HasNullCommandContainer([NotNull] string key)
         {
             if (this.Exists(key) == false)
             {
@@ -305,7 +287,7 @@
         /// <param name="key">The command key.</param>
         /// <returns>True if ICommand is null, false otherwise.</returns>
         /// <exception cref="CommandNotDefinedException">Command with this key is not registered, yet.</exception>
-        public bool HasNullCommand(string key)
+        public bool HasNullCommand([NotNull] string key)
         {
             if (this.Exists(key) == false)
             {
@@ -320,12 +302,11 @@
         /// Removes the ICommand corresponding the specified key.
         /// </summary>
         /// <param name="key">The command key.</param>
-        public void Remove(string key)
+        public void Remove([NotNull] string key)
         {
             if (this.commandContainers.Any(k => k.Key == key))
             {
-                ICommandContainer oldCommandDefinition;
-                this.commandContainers.TryRemove(key, out oldCommandDefinition);
+                this.commandContainers.TryRemove(key, out var _);
             }
         }
 
@@ -334,11 +315,7 @@
         /// </summary>
         public void RemoveAll()
         {
-            if (this.commandContainers != null)
-            {
-                this.commandContainers.Clear();
-            }
+            this.commandContainers?.Clear();
         }
-        #endregion Methods
     }
 }

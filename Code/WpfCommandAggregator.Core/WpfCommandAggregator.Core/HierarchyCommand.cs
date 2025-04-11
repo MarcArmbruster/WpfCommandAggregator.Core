@@ -29,17 +29,11 @@
     ///   </list>
     /// </remarks>
     public class HierarchyCommand : RelayCommand
-    {
-        #region Private Properties
-
+    {       
         /// <summary>
         /// The child commands.
         /// </summary>
-        private ConcurrentBag<ICommand> childCommands = new ConcurrentBag<ICommand>();
-
-        #endregion Private Properties
-
-        #region Public Properties
+        private ConcurrentBag<ICommand?> childCommands = new ConcurrentBag<ICommand?>();
 
         /// <summary>
         /// Gets or sets the child commands. Null value leads to an empty collection.
@@ -47,18 +41,18 @@
         /// <value>
         /// The child commands.
         /// </value>
-        public IEnumerable<ICommand> ChildCommands
+        public IEnumerable<ICommand?> ChildCommands
         {
             get => this.childCommands;
             set
             {
                 if (value != null)
                 {
-                    this.childCommands = new ConcurrentBag<ICommand>(value);
+                    this.childCommands = new ConcurrentBag<ICommand?>(value);
                 }
                 else
                 {
-                    this.childCommands = new ConcurrentBag<ICommand>();
+                    this.childCommands = new ConcurrentBag<ICommand?>();
                 }
             }
         }
@@ -79,10 +73,6 @@
         /// </value>
         public HierarchyCanExecuteStrategy CanExecuteStrategy { get; set; }
 
-        #endregion Public Properties
-
-        #region Constructors
-
         /// <summary>
         /// Initializes a new instance of the <see cref="HierarchyCommand" /> class.
         /// </summary>
@@ -91,8 +81,8 @@
         /// <param name="executeStrategy">The execute strategy (default = MasterCommandOnly).</param>
         /// <param name="canExecuteStrategy">The can execute strategy (default = DependsOnAllChilds).</param>
         public HierarchyCommand(
-            Action<object> execute,
-            Predicate<object> canExecute,
+            Action<object?>? execute,
+            Predicate<object?>? canExecute,
             HierarchyExecuteStrategy executeStrategy = HierarchyExecuteStrategy.MasterCommandOnly,
             HierarchyCanExecuteStrategy canExecuteStrategy = HierarchyCanExecuteStrategy.DependsOnAllChilds) : base(execute, canExecute)
         {
@@ -109,9 +99,9 @@
         /// <param name="executeStrategy">The execute strategy (default = MasterCommandOnly).</param>
         /// <param name="canExecuteStrategy">The can execute strategy (default = DependsOnAllChilds).</param>
         public HierarchyCommand(
-            IEnumerable<ICommand> childCommands,
-            Action<object> execute,
-            Predicate<object> canExecute,
+            IEnumerable<ICommand?> childCommands,
+            Action<object?>? execute,
+            Predicate<object?>? canExecute,
             HierarchyExecuteStrategy executeStrategy = HierarchyExecuteStrategy.MasterCommandOnly,
             HierarchyCanExecuteStrategy canExecuteStrategy = HierarchyCanExecuteStrategy.DependsOnAllChilds) : base(execute, canExecute)
         {
@@ -120,15 +110,11 @@
             this.ChildCommands = childCommands;
         }
 
-        #endregion Constructors
-
-        #region Private Methods
-
         /// <summary>
         /// Executes the command via base class (RelayCommand). Ignoring child commands.
         /// </summary>
         /// <param name="parameter">The parameter.</param>
-        private void ExecuteBase(object parameter)
+        private void ExecuteBase(object? parameter)
         {
             base.Execute(parameter);
         }
@@ -137,7 +123,7 @@
         /// Calls the base CanExecute (RelayCommand). Ignoring child commands.
         /// </summary>
         /// <param name="parameter">The parameter.</param>
-        private bool CanExecuteBase(object parameter)
+        private bool CanExecuteBase(object? parameter)
         {
             return base.CanExecute(parameter);
         }
@@ -146,7 +132,7 @@
         /// Executes the child commands.
         /// </summary>
         /// <param name="parameter">The parameter (will be transfered to child commands).</param>
-        private void ExecuteChildCommands(object parameter)
+        private void ExecuteChildCommands(object? parameter)
         {
             if (this.ChildCommands == null || this.ChildCommands.Any() == false)
             {
@@ -155,7 +141,7 @@
 
             foreach (var childCommand in this.ChildCommands.Where(c => c != null).Reverse())
             {
-                childCommand.Execute(parameter);
+                childCommand!.Execute(parameter);
             }
         }
 
@@ -164,14 +150,16 @@
         /// </summary>
         /// <param name="parameter">The parameter (will be transfered to child commands).</param>
         /// <returns>True if all child commands can be executed.</returns>
-        private bool CanExecuteAllChildAggregation(object parameter)
+        private bool CanExecuteAllChildAggregation(object? parameter)
         {
             if (this.ChildCommands == null || this.ChildCommands.Any() == false)
             {
                 return false;
             }
 
-            return this.ChildCommands.Where(ce => ce != null).All(canExec => canExec.CanExecute(parameter) == true);
+            return this.ChildCommands
+                    .Where(ce => ce != null)
+                    .All(canExec => canExec!.CanExecute(parameter) == true);
         }
 
         /// <summary>
@@ -179,25 +167,23 @@
         /// </summary>
         /// <param name="parameter">The parameter (will be transfered to child commands).</param>
         /// <returns>True if at least on child command can be executed.</returns>
-        private bool CanExecuteAnyChildAggregation(object parameter)
+        private bool CanExecuteAnyChildAggregation(object? parameter)
         {
             if (this.ChildCommands == null || this.ChildCommands.Any() == false)
             {
                 return false;
             }
 
-            return this.ChildCommands.Where(ce => ce != null).Any(canExec => canExec.CanExecute(parameter) == true);
+            return this.ChildCommands
+                .Where(ce => ce != null)
+                .Any(canExec => canExec!.CanExecute(parameter) == true);
         }
-
-        #endregion Private Methods
-
-        #region Public Methods
 
         /// <summary>
         /// Adds the child command (if it is not null).
         /// </summary>
         /// <param name="childCommand">The child command.</param>
-        public void AddChildCommand(ICommand childCommand)
+        public void AddChildCommand(ICommand? childCommand)
         {
             if (childCommand != null)
             {
@@ -209,22 +195,22 @@
         /// Adds the child commands.
         /// </summary>
         /// <param name="childs">The childs.</param>
-        public void AddChildsCommand(IEnumerable<ICommand> childs)
+        public void AddChildsCommand(IEnumerable<ICommand?> childs)
         {
-            this.AddChildsCommand(childs.ToArray());
+            this.AddChildsCommand(childs.Where(c => c != null).ToArray());
         }
 
         /// <summary>
         /// Adds the child commands.
         /// </summary>
         /// <param name="childs">The childs.</param>
-        public void AddChildsCommand(params ICommand[] childs)
+        public void AddChildsCommand(params ICommand?[] childs)
         {
             if (childs != null)
             {
                 foreach (var child in childs.Where(c => c != null))
                 {
-                    this.childCommands.Add(child);
+                    this.childCommands.Add(child!);
                 }
             }
         }
@@ -234,7 +220,8 @@
         /// </summary>
         public void ClearCommands()
         {
-            this.childCommands = new ConcurrentBag<ICommand>();
+            this.childCommands.Clear();
+            this.childCommands = new ConcurrentBag<ICommand?>();
         }
 
         /// <summary>
@@ -242,7 +229,7 @@
         /// Child commands will be executed based on the defined HierarchyExecuteStrategy value.
         /// </summary>
         /// <param name="parameter">The Execute parameter value.</param>
-        public override void Execute(object parameter)
+        public override void Execute(object? parameter)
         {
             if (this.ChildCommands == null || !this.ChildCommands.Any())
             {
@@ -279,7 +266,7 @@
         /// <returns>
         /// True, if command can be executed; false otheriwse.
         /// </returns>
-        public override bool CanExecute(object parameter)
+        public override bool CanExecute(object? parameter)
         {
             if (this.ChildCommands == null || !this.ChildCommands.Any())
             {
@@ -305,7 +292,5 @@
 
             return canExecuteThisCommand;
         }
-
-        #endregion Public Methods
     }
 }

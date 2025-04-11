@@ -1,6 +1,7 @@
-﻿<Application x:Class="WpfCommandAggregator.Core.ExampleApp.App"
-             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+﻿<Application
+    x:Class="WpfCommandAggregator.Core.ExampleApp.App"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
     <Application.Resources>
 
         <RadialGradientBrush x:Key="BeautifulBackground" Center="0.2,0.2" GradientOrigin="0.3,0.3" RadiusX="1.5" RadiusY="0.9">

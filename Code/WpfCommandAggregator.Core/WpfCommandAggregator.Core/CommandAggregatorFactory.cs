@@ -28,7 +28,7 @@
         /// <summary>
         /// Type of the optional external command aggregator type.
         /// </summary>
-        private static Type externalAggregatorType = null;
+        private static Type? externalAggregatorType = null;
 
         /// <summary>
         /// Registers the given, custom command aggregator type.
@@ -64,13 +64,13 @@
         {
             if (externalAggregatorType != null)
             {
-                ICommandAggregator aggregator = Activator.CreateInstance(externalAggregatorType) as ICommandAggregator;
+                ICommandAggregator? aggregator = Activator.CreateInstance(externalAggregatorType) as ICommandAggregator;
                 if (aggregator == null)
                 {
                     throw new InvalidCastException("The registered aggregator type could not be treated as a valid command aggregator");
                 }
 
-                return aggregator;
+                return aggregator!;
             }
 
             return new CommandAggregator();
@@ -85,7 +85,7 @@
         {
             if (externalAggregatorType != null)
             {
-                ICommandAggregator aggregator = Activator.CreateInstance(externalAggregatorType) as ICommandAggregator;
+                ICommandAggregator? aggregator = Activator.CreateInstance(externalAggregatorType) as ICommandAggregator;
                 if (aggregator == null)
                 {
                     throw new InvalidCastException("Registered aggregator type could not handled as a valid command aggregator");
@@ -96,7 +96,7 @@
                     aggregator.AddOrSetCommand(cmd.Key, cmd.Value);
                 }
 
-                return aggregator;
+                return aggregator!;
             }
 
             return new CommandAggregator(commandContainers);

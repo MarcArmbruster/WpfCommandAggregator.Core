@@ -12,14 +12,14 @@
         /// </summary>
         private class BaseTestViewModel : BaseVm
         {
-            private string defaultTestProperty;
+            private string defaultTestProperty = string.Empty;
             public string DefaultTestProperty
             {
                 get => this.defaultTestProperty;
                 set => this.SetPropertyValue(ref this.defaultTestProperty, value);
             }
 
-            private string preAndPostActionTestProperty;
+            private string preAndPostActionTestProperty = string.Empty;
             public string PreAndPostActionTestProperty
             {
                 get => this.preAndPostActionTestProperty;
@@ -30,12 +30,12 @@
                     () => this.PostSetResult = "after");
             }
 
-            internal string PreSetResult { get; private set; }
-            internal string PostSetResult { get; private set; }
+            internal string PreSetResult { get; private set; } = string.Empty;
+            internal string PostSetResult { get; private set; } = string.Empty;
 
             protected override void InitCommands()
             {
-                this.CmdAgg.AddOrSetCommand("TestCommand", new RelayCommand(new Action<object>(p1 => { })));
+                this.CmdAgg.AddOrSetCommand("TestCommand", new RelayCommand(new Action<object?>(p1 => { })));
             }
         }
 

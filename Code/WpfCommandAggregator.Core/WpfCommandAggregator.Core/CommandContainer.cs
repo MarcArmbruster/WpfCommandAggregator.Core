@@ -36,13 +36,13 @@
         /// Gets the dictionary of command settings.
         /// </summary>
         [JsonIgnore] 
-        public Dictionary<string, object> Settings { get; private set; } = new Dictionary<string, object>();
+        public Dictionary<string, object?> Settings { get; private set; } = [];
 
         /// <summary>
         /// The constructor of the command container.
         /// </summary>
         /// <param name="command">The command.</param>
-        public CommandContainer(ICommand command) : this(command, null)
+        public CommandContainer(ICommand? command) : this(command, null)
         {
         }
 
@@ -51,13 +51,10 @@
         /// </summary>
         /// <param name="command">The command.</param>
         /// <param name="settings">The optional settings.</param>
-        public CommandContainer(ICommand command, Dictionary<string, object> settings)
+        public CommandContainer(ICommand? command, Dictionary<string, object?>? settings)
         {
-            this.Command = command;
-            if (settings != null)
-            {
-                this.Settings = settings;
-            }
+            this.Command = command ?? new RelayCommand(o => { });            
+            this.Settings = settings ?? [];            
         }
 
         /// <summary>
@@ -66,18 +63,17 @@
         /// <param name="settingKey"></param>
         /// <returns>The value of the setting.</returns>
         [JsonIgnore]
-        public object this[string settingKey]
+        public object? this[string settingKey]
         {
             get
             {
-                if (this.Settings.ContainsKey(settingKey))
+                if (this.Settings != null && this.Settings.ContainsKey(settingKey))
                 {
                     return this.Settings[settingKey];
                 }
 
-                return null;
-            }
-            
+                return default;
+            }           
         }
     }
 }

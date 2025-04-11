@@ -15,10 +15,10 @@
             {
             }
 
-            public string PropertyA
+            public string? PropertyA
             {
-                get => this.GetPropertyValue<string>();
-                set => this.SetPropertyValue<string>(value);
+                get => this.GetPropertyValue<string?>();
+                set => this.SetPropertyValue<string?>(value);
             }
         }
 

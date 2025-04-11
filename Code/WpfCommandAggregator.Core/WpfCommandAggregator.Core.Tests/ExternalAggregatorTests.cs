@@ -3,6 +3,7 @@
     using Microsoft.VisualStudio.TestTools.UnitTesting;
     using System;
     using System.Collections.Generic;
+    using System.Diagnostics.CodeAnalysis;
     using System.Threading.Tasks;
     using System.Windows.Input;
     using WpfCommandAggregator.Core;
@@ -41,32 +42,32 @@
 
         public bool HasAnyCommandContainer => throw new NotImplementedException();
 
-        public void AddOrSetCommand(string key, ICommand command)
+        public void AddOrSetCommand([NotNull] string key, ICommand? command)
         {
             throw new NotImplementedException();
         }
 
-        public void AddOrSetCommand(string key, ICommand command, Dictionary<string, object> settings)
+        public void AddOrSetCommand([NotNull] string key, ICommand? command, Dictionary<string, object?>? settings)
         {
             throw new NotImplementedException();
         }
 
-        public void AddOrSetCommand(string key, ICommandContainer commandContainer)
+        public void AddOrSetCommand([NotNull] string key, ICommandContainer? commandContainer)
         {
             throw new NotImplementedException();
         }
 
-        public void AddOrSetCommand(string key, Action<object> executeDelegate, Predicate<object> canExecuteDelegate)
+        public void AddOrSetCommand([NotNull] string key, Action<object?>? executeDelegate, Predicate<object?>? canExecuteDelegate)
         {
             throw new NotImplementedException();
         }
 
-        public void AddOrSetCommand(string key, Action<object> executeDelegate)
+        public void AddOrSetCommand([NotNull] string key, Action<object?>? executeDelegate)
         {
             throw new NotImplementedException();
         }
 
-        public void AddOrSetCommand(string key, Action<object> executeDelegate, Predicate<object> canExecuteDelegate, Dictionary<string, object> settings)
+        public void AddOrSetCommand([NotNull] string key, Action<object?>? executeDelegate, Predicate<object?>? canExecuteDelegate, Dictionary<string, object?>? settings)
         {
             throw new NotImplementedException();
         }
@@ -76,32 +77,32 @@
             throw new NotImplementedException();
         }
 
-        public Task ExecuteAsync(string key, object parameter = null)
+        public Task ExecuteAsync([NotNull] string key, object? parameter = null)
         {
             throw new NotImplementedException();
         }
 
-        public bool Exists(string key)
+        public bool Exists([NotNull] string key)
         {
             throw new NotImplementedException();
         }
 
-        public ICommandContainer GetCommandContainer(string key)
+        public ICommandContainer GetCommandContainer([NotNull] string key)
         {
             throw new NotImplementedException();
         }
 
-        public bool HasNullCommandContainer(string key)
+        public bool HasNullCommandContainer([NotNull] string key)
         {
             throw new NotImplementedException();
         }
 
-        public bool HasNullCommand(string key)
+        public bool HasNullCommand([NotNull] string key)
         {
             throw new NotImplementedException();
         }
 
-        public void Remove(string key)
+        public void Remove([NotNull] string key)
         {
             throw new NotImplementedException();
         }

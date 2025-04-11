@@ -17,19 +17,19 @@
             StringBuilder strBld = new StringBuilder(1000);
 
             HierarchyCommand hierCmd = new HierarchyCommand(
-                new Action<object>(p1 => strBld.Append("Master")),
-                new Predicate<object>(p2 => true),
+                new Action<object?>(p1 => strBld.Append("Master")),
+                new Predicate<object?>(p2 => true),
                 HierarchyExecuteStrategy.AllChildsOnly,
                 HierarchyCanExecuteStrategy.DependsOnAllChilds);
 
-            var child1 = new RelayCommand(new Action<object>(p1 => strBld.Append("1")), new Predicate<object>(p2 => true));
-            var child2 = new RelayCommand(new Action<object>(p1 => strBld.Append("2")), new Predicate<object>(p2 => true));
-            var child3 = new RelayCommand(new Action<object>(p1 => strBld.Append("3")), new Predicate<object>(p2 => true));
+            var child1 = new RelayCommand(new Action<object?>(p1 => strBld.Append("1")), new Predicate<object?>(p2 => true));
+            var child2 = new RelayCommand(new Action<object?>(p1 => strBld.Append("2")), new Predicate<object?>(p2 => true));
+            var child3 = new RelayCommand(new Action<object?>(p1 => strBld.Append("3")), new Predicate<object?>(p2 => true));
 
             hierCmd.AddChildCommand(child1);
             Assert.AreEqual(1, hierCmd.ChildCommands.Count());
 
-            hierCmd.AddChildsCommand(new List<ICommand> { child2, child3, null });
+            hierCmd.AddChildsCommand(new List<ICommand?> { child2, child3, null });
             Assert.AreEqual(3, hierCmd.ChildCommands.Count());
 
             hierCmd.AddChildCommand(null);
@@ -42,8 +42,8 @@
             StringBuilder strBld = new StringBuilder(1000);
 
             HierarchyCommand hierCmd = new HierarchyCommand(
-                new Action<object>(p1 => strBld.Append("Master")),
-                new Predicate<object>(p2 => true),
+                new Action<object?>(p1 => strBld.Append("Master")),
+                new Predicate<object?>(p2 => true),
                 HierarchyExecuteStrategy.AllChildsOnly,
                 HierarchyCanExecuteStrategy.DependsOnAllChilds);
 
@@ -63,16 +63,16 @@
             StringBuilder strBld = new StringBuilder(1000);
 
             HierarchyCommand hierCmd = new HierarchyCommand(
-                new Action<object>(p1 => strBld.Append("Master")),
-                new Predicate<object>(p2 => true),
+                new Action<object?>(p1 => strBld.Append("Master")),
+                new Predicate<object?>(p2 => true),
                 HierarchyExecuteStrategy.AllChildsOnly,
                 HierarchyCanExecuteStrategy.DependsOnAllChilds);
 
-            var child1 = new RelayCommand(new Action<object>(p1 => strBld.Append("1")), new Predicate<object>(p2 => true));
-            var child2 = new RelayCommand(new Action<object>(p1 => strBld.Append("2")), new Predicate<object>(p2 => true));
-            var child3 = new RelayCommand(new Action<object>(p1 => strBld.Append("3")), new Predicate<object>(p2 => true));
+            var child1 = new RelayCommand(new Action<object?>(p1 => strBld.Append("1")), new Predicate<object?>(p2 => true));
+            var child2 = new RelayCommand(new Action<object?>(p1 => strBld.Append("2")), new Predicate<object?>(p2 => true));
+            var child3 = new RelayCommand(new Action<object?>(p1 => strBld.Append("3")), new Predicate<object?>(p2 => true));
 
-            hierCmd.AddChildsCommand(new List<ICommand> { child1, child2, child3, null });
+            hierCmd.AddChildsCommand(new List<ICommand?> { child1, child2, child3, null });
             Assert.AreEqual(3, hierCmd.ChildCommands.Count());
 
             hierCmd.ClearCommands();
@@ -86,14 +86,14 @@
             StringBuilder strBld = new StringBuilder(1000);
 
             HierarchyCommand hierCmd = new HierarchyCommand(
-                new Action<object>(p1 => strBld.Append("Master")),
-                new Predicate<object>(p2 => true),
+                new Action<object?>(p1 => strBld.Append("Master")),
+                new Predicate<object?>(p2 => true),
                 HierarchyExecuteStrategy.AllChildsOnly,
                 HierarchyCanExecuteStrategy.DependsOnAllChilds);
 
-            var child1 = new RelayCommand(new Action<object>(p1 => strBld.Append("1")), new Predicate<object>(p2 => true));
-            var child2 = new RelayCommand(new Action<object>(p1 => strBld.Append("2")), new Predicate<object>(p2 => true));
-            var child3 = new RelayCommand(new Action<object>(p1 => strBld.Append("3")), new Predicate<object>(p2 => true));
+            var child1 = new RelayCommand(new Action<object?>(p1 => strBld.Append("1")), new Predicate<object?>(p2 => true));
+            var child2 = new RelayCommand(new Action<object?>(p1 => strBld.Append("2")), new Predicate<object?>(p2 => true));
+            var child3 = new RelayCommand(new Action<object?>(p1 => strBld.Append("3")), new Predicate<object?>(p2 => true));
 
             hierCmd.AddChildsCommand(new List<ICommand> { child1, child2, child3 });
             Assert.AreEqual(3, hierCmd.ChildCommands.Count());
@@ -111,14 +111,14 @@
             StringBuilder strBld = new StringBuilder(1000);
 
             HierarchyCommand hierCmd = new HierarchyCommand(
-                new Action<object>(p1 => strBld.Append("Master")),
-                new Predicate<object>(p2 => true),
+                new Action<object?>(p1 => strBld.Append("Master")),
+                new Predicate<object?>(p2 => true),
                 HierarchyExecuteStrategy.MasterCommandOnly,
                 HierarchyCanExecuteStrategy.DependsOnAllChilds);
 
-            var child1 = new RelayCommand(new Action<object>(p1 => strBld.Append("1")), new Predicate<object>(p2 => true));
-            var child2 = new RelayCommand(new Action<object>(p1 => strBld.Append("2")), new Predicate<object>(p2 => true));
-            var child3 = new RelayCommand(new Action<object>(p1 => strBld.Append("3")), new Predicate<object>(p2 => true));
+            var child1 = new RelayCommand(new Action<object?>(p1 => strBld.Append("1")), new Predicate<object?>(p2 => true));
+            var child2 = new RelayCommand(new Action<object?>(p1 => strBld.Append("2")), new Predicate<object?>(p2 => true));
+            var child3 = new RelayCommand(new Action<object?>(p1 => strBld.Append("3")), new Predicate<object?>(p2 => true));
 
             hierCmd.AddChildsCommand(new List<ICommand> { child1, child2, child3 });
             Assert.AreEqual(3, hierCmd.ChildCommands.Count());
@@ -134,14 +134,14 @@
         public void ExecutionTestMasterAndAllChilds()
         {
             StringBuilder strBld = new StringBuilder(1000);
-            var child1 = new RelayCommand(new Action<object>(p1 => strBld.Append("1")), new Predicate<object>(p2 => true));
-            var child2 = new RelayCommand(new Action<object>(p1 => strBld.Append("2")), new Predicate<object>(p2 => true));
-            var child3 = new RelayCommand(new Action<object>(p1 => strBld.Append("3")), new Predicate<object>(p2 => true));
+            var child1 = new RelayCommand(new Action<object?>(p1 => strBld.Append("1")), new Predicate<object?>(p2 => true));
+            var child2 = new RelayCommand(new Action<object?>(p1 => strBld.Append("2")), new Predicate<object?>(p2 => true));
+            var child3 = new RelayCommand(new Action<object?>(p1 => strBld.Append("3")), new Predicate<object?>(p2 => true));
 
             HierarchyCommand hierCmd = new HierarchyCommand(
                 new List<ICommand> { child1, child2, child3 },
-                new Action<object>(p1 => strBld.Append("Master")),
-                new Predicate<object>(p2 => true),
+                new Action<object?>(p1 => strBld.Append("Master")),
+                new Predicate<object?>(p2 => true),
                 HierarchyExecuteStrategy.MasterAndAllChilds,
                 HierarchyCanExecuteStrategy.DependsOnAllChilds);
 
@@ -158,14 +158,14 @@
         public void CanExecutionTestAllChilds()
         {
             StringBuilder strBld = new StringBuilder(1000);
-            var child1 = new RelayCommand(new Action<object>(p1 => strBld.Append("1")), new Predicate<object>(p2 => true));
-            var child2 = new RelayCommand(new Action<object>(p1 => strBld.Append("2")), new Predicate<object>(p2 => true));
-            var child3 = new RelayCommand(new Action<object>(p1 => strBld.Append("3")), new Predicate<object>(p2 => true));
+            var child1 = new RelayCommand(new Action<object?>(p1 => strBld.Append("1")), new Predicate<object?>(p2 => true));
+            var child2 = new RelayCommand(new Action<object?>(p1 => strBld.Append("2")), new Predicate<object?>(p2 => true));
+            var child3 = new RelayCommand(new Action<object?>(p1 => strBld.Append("3")), new Predicate<object?>(p2 => true));
 
             HierarchyCommand hierCmd = new HierarchyCommand(
                 new List<ICommand> { child1, child2, child3 },
-                new Action<object>(p1 => strBld.Append("Master")),
-                new Predicate<object>(p2 => true),
+                new Action<object?>(p1 => strBld.Append("Master")),
+                new Predicate<object?>(p2 => true),
                 HierarchyExecuteStrategy.MasterAndAllChilds,
                 HierarchyCanExecuteStrategy.DependsOnAllChilds);
 
@@ -173,9 +173,9 @@
             Assert.IsTrue(hierCmd.CanExecute(null));
 
             hierCmd.ClearCommands();
-            var child1b = new RelayCommand(new Action<object>(p1 => strBld.Append("1")), new Predicate<object>(p2 => true));
-            var child2b = new RelayCommand(new Action<object>(p1 => strBld.Append("2")), new Predicate<object>(p2 => false));
-            var child3b = new RelayCommand(new Action<object>(p1 => strBld.Append("3")), new Predicate<object>(p2 => true));
+            var child1b = new RelayCommand(new Action<object?>(p1 => strBld.Append("1")), new Predicate<object?>(p2 => true));
+            var child2b = new RelayCommand(new Action<object?>(p1 => strBld.Append("2")), new Predicate<object?>(p2 => false));
+            var child3b = new RelayCommand(new Action<object?>(p1 => strBld.Append("3")), new Predicate<object?>(p2 => true));
             hierCmd.AddChildsCommand(new List<ICommand> { child1b, child2b, child3b });
             Assert.AreEqual(3, hierCmd.ChildCommands.Count());
             Assert.IsFalse(hierCmd.CanExecute(null));
@@ -185,14 +185,14 @@
         public void CanExecutionTestAtLeastOneChild()
         {
             StringBuilder strBld = new StringBuilder(1000);
-            var child1 = new RelayCommand(new Action<object>(p1 => strBld.Append("1")), new Predicate<object>(p2 => true));
-            var child2 = new RelayCommand(new Action<object>(p1 => strBld.Append("2")), new Predicate<object>(p2 => false));
-            var child3 = new RelayCommand(new Action<object>(p1 => strBld.Append("3")), new Predicate<object>(p2 => false));
+            var child1 = new RelayCommand(new Action<object?>(p1 => strBld.Append("1")), new Predicate<object?>(p2 => true));
+            var child2 = new RelayCommand(new Action<object?>(p1 => strBld.Append("2")), new Predicate<object?>(p2 => false));
+            var child3 = new RelayCommand(new Action<object?>(p1 => strBld.Append("3")), new Predicate<object?>(p2 => false));
 
             HierarchyCommand hierCmd = new HierarchyCommand(
                 new List<ICommand> { child1, child2, child3 },
-                new Action<object>(p1 => strBld.Append("Master")),
-                new Predicate<object>(p2 => true),
+                new Action<object?>(p1 => strBld.Append("Master")),
+                new Predicate<object?>(p2 => true),
                 HierarchyExecuteStrategy.MasterAndAllChilds,
                 HierarchyCanExecuteStrategy.DependsOnAtLeastOneChild);
 
@@ -200,9 +200,9 @@
             Assert.IsTrue(hierCmd.CanExecute(null));
 
             hierCmd.ClearCommands();
-            var child1b = new RelayCommand(new Action<object>(p1 => strBld.Append("1")), new Predicate<object>(p2 => false));
-            var child2b = new RelayCommand(new Action<object>(p1 => strBld.Append("2")), new Predicate<object>(p2 => false));
-            var child3b = new RelayCommand(new Action<object>(p1 => strBld.Append("3")), new Predicate<object>(p2 => false));
+            var child1b = new RelayCommand(new Action<object?>(p1 => strBld.Append("1")), new Predicate<object?>(p2 => false));
+            var child2b = new RelayCommand(new Action<object?>(p1 => strBld.Append("2")), new Predicate<object?>(p2 => false));
+            var child3b = new RelayCommand(new Action<object?>(p1 => strBld.Append("3")), new Predicate<object?>(p2 => false));
             hierCmd.AddChildsCommand(new List<ICommand> { child1b, child2b, child3b });
             Assert.AreEqual(3, hierCmd.ChildCommands.Count());
             Assert.IsFalse(hierCmd.CanExecute(null));
@@ -212,14 +212,14 @@
         public void CanExecutionTestMasterOnly()
         {
             StringBuilder strBld = new StringBuilder(1000);
-            var child1 = new RelayCommand(new Action<object>(p1 => strBld.Append("1")), new Predicate<object>(p2 => true));
-            var child2 = new RelayCommand(new Action<object>(p1 => strBld.Append("2")), new Predicate<object>(p2 => false));
-            var child3 = new RelayCommand(new Action<object>(p1 => strBld.Append("3")), new Predicate<object>(p2 => false));
+            var child1 = new RelayCommand(new Action<object?>(p1 => strBld.Append("1")), new Predicate<object?>(p2 => true));
+            var child2 = new RelayCommand(new Action<object?>(p1 => strBld.Append("2")), new Predicate<object?>(p2 => false));
+            var child3 = new RelayCommand(new Action<object?>(p1 => strBld.Append("3")), new Predicate<object?>(p2 => false));
 
             HierarchyCommand hierCmd = new HierarchyCommand(
                 new List<ICommand> { child1, child2, child3 },
-                new Action<object>(p1 => strBld.Append("Master")),
-                new Predicate<object>(p2 => true),
+                new Action<object?>(p1 => strBld.Append("Master")),
+                new Predicate<object?>(p2 => true),
                 HierarchyExecuteStrategy.MasterAndAllChilds,
                 HierarchyCanExecuteStrategy.DependsOnMasterCommandOnly);
 
@@ -227,22 +227,22 @@
             Assert.IsTrue(hierCmd.CanExecute(null));
 
             hierCmd.ClearCommands();
-            var child1b = new RelayCommand(new Action<object>(p1 => strBld.Append("1")), new Predicate<object>(p2 => false));
-            var child2b = new RelayCommand(new Action<object>(p1 => strBld.Append("2")), new Predicate<object>(p2 => false));
-            var child3b = new RelayCommand(new Action<object>(p1 => strBld.Append("3")), new Predicate<object>(p2 => false));
+            var child1b = new RelayCommand(new Action<object?>(p1 => strBld.Append("1")), new Predicate<object?>(p2 => false));
+            var child2b = new RelayCommand(new Action<object?>(p1 => strBld.Append("2")), new Predicate<object?>(p2 => false));
+            var child3b = new RelayCommand(new Action<object?>(p1 => strBld.Append("3")), new Predicate<object?>(p2 => false));
             hierCmd.AddChildsCommand(new List<ICommand> { child1b, child2b, child3b });
             Assert.AreEqual(3, hierCmd.ChildCommands.Count());
             Assert.IsTrue(hierCmd.CanExecute(null));
 
             hierCmd.ClearCommands();
-            var child1c = new RelayCommand(new Action<object>(p1 => strBld.Append("1")), new Predicate<object>(p2 => true));
-            var child2c = new RelayCommand(new Action<object>(p1 => strBld.Append("2")), new Predicate<object>(p2 => true));
-            var child3c = new RelayCommand(new Action<object>(p1 => strBld.Append("3")), new Predicate<object>(p2 => true));
+            var child1c = new RelayCommand(new Action<object?>(p1 => strBld.Append("1")), new Predicate<object?>(p2 => true));
+            var child2c = new RelayCommand(new Action<object?>(p1 => strBld.Append("2")), new Predicate<object?>(p2 => true));
+            var child3c = new RelayCommand(new Action<object?>(p1 => strBld.Append("3")), new Predicate<object?>(p2 => true));
 
             HierarchyCommand hierCmdC = new HierarchyCommand(
                 new List<ICommand> { child1c, child2c, child3c },
-                new Action<object>(p1 => strBld.Append("Master")),
-                new Predicate<object>(p2 => false),
+                new Action<object?>(p1 => strBld.Append("Master")),
+                new Predicate<object?>(p2 => false),
                 HierarchyExecuteStrategy.MasterAndAllChilds,
                 HierarchyCanExecuteStrategy.DependsOnMasterCommandOnly);
 

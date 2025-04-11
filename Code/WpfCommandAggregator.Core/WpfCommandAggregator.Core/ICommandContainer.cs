@@ -33,13 +33,13 @@
         /// <summary>
         /// Gets the dictionary of command settings.
         /// </summary>
-        Dictionary<string, object> Settings { get; }
+        Dictionary<string, object?> Settings { get; }
 
         /// <summary>
         /// Indexer access to the settings.
         /// </summary>
         /// <param name="settingKey"></param>
         /// <returns>The value of the setting.</returns>
-        object this[string settingKey] { get; }
+        object? this[string settingKey] { get; }
     }
 }

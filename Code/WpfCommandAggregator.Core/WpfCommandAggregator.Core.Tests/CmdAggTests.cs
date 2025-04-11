@@ -19,8 +19,8 @@
             cmdAgg.AddOrSetCommand("TestCommand1", new RelayCommand(p1 => { }, p2 => true));
             cmdAgg.AddOrSetCommand("TestCommand2", new RelayCommand(p1 => { }, p2 => true));
 
-            Action<object> act = new Action<object>(p0 => { });
-            Predicate<object> pred = new Predicate<object>(p1 => { return true; });
+            Action<object?> act = new Action<object?>(p0 => { });
+            Predicate<object?> pred = new Predicate<object?>(p1 => { return true; });
             cmdAgg.AddOrSetCommand("TestCommand3", act, pred);
 
             Assert.IsTrue(cmdAgg.Exists("TestCommand1"));
@@ -50,7 +50,7 @@
         {
             ICommandAggregator cmdAgg = CommandAggregatorFactory.GetNewCommandAggregator();
 
-            cmdAgg.AddOrSetCommand("TestCommand1", (ICommandContainer)null);
+            cmdAgg.AddOrSetCommand("TestCommand1", (ICommandContainer?)null);
             cmdAgg.AddOrSetCommand("TestCommand2", new RelayCommand(p1 => { }, p2 => true));
 
             Assert.IsTrue(cmdAgg.HasNullCommandContainer("TestCommand1"));
@@ -62,7 +62,7 @@
         {
             ICommandAggregator cmdAgg = CommandAggregatorFactory.GetNewCommandAggregator();
 
-            cmdAgg.AddOrSetCommand("TestCommand1", (ICommandContainer)null);
+            cmdAgg.AddOrSetCommand("TestCommand1", (ICommandContainer?)null);
             cmdAgg.AddOrSetCommand("TestCommand2", new RelayCommand(p1 => { }, p2 => true));
 
             Assert.IsTrue(cmdAgg.HasNullCommand("TestCommand1"));
@@ -99,7 +99,6 @@
             Assert.IsFalse(cmdAgg.Exists("TestCommand3"));
             Assert.IsTrue(cmdAgg.Exists("TestCommand4"));
             Assert.IsTrue(cmdAgg.Exists("TestCommand5"));
-
 
             cmdAgg.RemoveAll();
             Assert.IsTrue(cmdAgg.Count() == 0);

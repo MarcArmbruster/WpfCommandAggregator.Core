@@ -11,8 +11,8 @@
         /// </summary>
         private class BaseTestViewModel : BaseVm
         {
-            private string testProperty1;
-            private string testProperty2;
+            private string testProperty1 = string.Empty;
+            private string testProperty2 = string.Empty;
 
             public string TestProperty1
             {

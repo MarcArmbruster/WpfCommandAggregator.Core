@@ -210,7 +210,7 @@ public abstract class BaseVm : INotifyPropertyChanged
         object? value = this.values[propertyName];
         if (value == null)
         {
-            return default(T);
+            return default;
         }
 
         return (T)value;

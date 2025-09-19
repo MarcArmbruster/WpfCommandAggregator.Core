@@ -18,6 +18,9 @@ See also other versions on nuget:<br/>
 * [nuGet: WPF Command Aggregator](https://www.nuget.org/packages/WPFCommandAggregator/)
 
 ## Versions 
+- 9.0.1.0
+    - SBOM included
+    - Target OSVersion set back to Win7
 - 9.0.0.0
     - Targets .NET9
 - 8.0.0.0

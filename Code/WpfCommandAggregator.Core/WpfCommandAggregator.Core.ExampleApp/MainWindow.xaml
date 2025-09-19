@@ -1,12 +1,13 @@
-﻿<Window x:Class="WpfCommandAggregator.Core.ExampleApp.MainWindow"
-        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:ap="clr-namespace:WPFCommandAggregator.Core.AttachedProperties;assembly=WPFCommandAggregator.Core"
-        ap:WindowCloser.WindowResult="{Binding WindowResult, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
-        Title="Wpf Command Aggregator CORE Example"
-        Width="600"
-        Height="600" 
-        WindowStartupLocation="CenterScreen">
+﻿<Window
+    x:Class="WpfCommandAggregator.Core.ExampleApp.MainWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:ap="clr-namespace:WPFCommandAggregator.Core.AttachedProperties;assembly=WPFCommandAggregator.Core"
+    Title="Wpf Command Aggregator CORE Example"
+    Width="600"
+    Height="600"
+    ap:WindowCloser.WindowResult="{Binding WindowResult, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+    WindowStartupLocation="CenterScreen">
     <Window.InputBindings>
         <KeyBinding
             Key="P"
@@ -59,8 +60,8 @@
                 <Button
                     Command="{Binding CmdAgg[MoveFocus].Command}"
                     Content="Set/remove Focus"
-                    ToolTip="sets or removes the focus of the 'First value' input field (attached property example)"
-                    Template="{StaticResource buttonTemplate}" />
+                    Template="{StaticResource buttonTemplate}"
+                    ToolTip="sets or removes the focus of the 'First value' input field (attached property example)" />
             </WrapPanel>
         </Border>
 
@@ -105,9 +106,9 @@
                 Grid.Column="2"
                 Content="Sum" />
             <TextBox
-                ap:Focused.Focused="{Binding Path=FirstValueHasFocus, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" 
                 Grid.Row="1"
                 Grid.Column="0"
+                ap:Focused.Focused="{Binding Path=FirstValueHasFocus, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
                 Text="{Binding Path=FirstInput, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay, FallbackValue='0'}" />
             <TextBox
                 Grid.Row="1"
@@ -123,8 +124,8 @@
 
         <Grid>
             <Grid.RowDefinitions>
-                <RowDefinition Height="36"/>
-                <RowDefinition Height="*"/>
+                <RowDefinition Height="36" />
+                <RowDefinition Height="*" />
             </Grid.RowDefinitions>
 
             <StackPanel Orientation="Horizontal">
@@ -132,16 +133,17 @@
                 <Button Command="{Binding CmdAgg[RemovePersons].Command}" Template="{StaticResource buttonTemplate}">Remove</Button>
                 <Button Command="{Binding CmdAgg[ReplacePerson].Command}" Template="{StaticResource buttonTemplate}">Replace</Button>
             </StackPanel>
-            <DataGrid Grid.Row="1" 
-                      AutoGenerateColumns="False" 
-                      ItemsSource="{Binding Persons, UpdateSourceTrigger=PropertyChanged, Mode=OneWay}">
+            <DataGrid
+                Grid.Row="1"
+                AutoGenerateColumns="False"
+                ItemsSource="{Binding Persons, UpdateSourceTrigger=PropertyChanged, Mode=OneWay}">
                 <DataGrid.Columns>
-                    <DataGridTextColumn Header="Name" Binding="{Binding Name}"/>
-                    <DataGridTextColumn Header="Age" Binding="{Binding Age}"/>
+                    <DataGridTextColumn Binding="{Binding Name}" Header="Name" />
+                    <DataGridTextColumn Binding="{Binding Age}" Header="Age" />
                 </DataGrid.Columns>
             </DataGrid>
 
         </Grid>
-        
+
     </DockPanel>
 </Window>

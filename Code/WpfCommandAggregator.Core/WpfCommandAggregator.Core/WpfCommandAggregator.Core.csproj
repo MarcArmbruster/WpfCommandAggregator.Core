@@ -11,7 +11,7 @@
     <IconUrl>https://github.com/MarcArmbruster/WpfCommandAggregator.Core/blob/master/WpfCmdAgg.png</IconUrl>
     <RepositoryUrl>https://github.com/MarcArmbruster/WpfCommandAggregator.Core</RepositoryUrl>
     <RepositoryType>Github</RepositoryType>
-    <PackageReleaseNotes>SBOM added</PackageReleaseNotes>
+    <PackageReleaseNotes>Targeting .NET 10</PackageReleaseNotes>
     <PackageTags>WPF Core .NET MVVM Command Aggregator Pattern C#</PackageTags>
     <AssemblyVersion>10.0.0.0</AssemblyVersion>
     <FileVersion>10.0.0.0</FileVersion>
